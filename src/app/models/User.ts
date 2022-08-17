@@ -17,6 +17,7 @@ class User {
     type: "enum",
     enum: UserRole,
     default: UserRole.COMMON,
+    nullable: false,
   })
   role: UserRole
 
