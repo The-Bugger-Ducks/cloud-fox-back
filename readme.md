@@ -43,7 +43,7 @@ O servidor inciará localmente na porta 3000 (citada no arquivo .env). Use o Ins
   
 |                                                                    Tipo | Rota                                 | Ação                            |
 | ----------------------------------------------------------------------: | :----------------------------------- | :------------------------------ |
-|   <hr>                                                                  | <hr>                                 | **Controle de chamados**        |
+|   <hr>                                                                  | <hr>                                 | **Controle de usuários**        |
 |    [![](https://img.shields.io/badge/GET-2E8B57?style=for-the-badge)]() | `/users/`                          | Listagem de usuários            |
 |    [![](https://img.shields.io/badge/GET-2E8B57?style=for-the-badge)]() | `/users/{userId}`                  | Dados de um usuário específico  |`
 |   [![](https://img.shields.io/badge/POST-4682B4?style=for-the-badge)]() | `/users/`                          | Cadastro de usuários            |
