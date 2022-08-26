@@ -1,14 +1,17 @@
 import { Request, Response } from 'express';
-import { getRepository, Repository } from 'typeorm';
-import { User } from '../models/User';
+import { AppDataSource } from '../../data-source';
+import { User } from '../entities/User';
 
 class UserController {
   async index(req: Request, res: Response) {
-    res.send('ok')
+    const userRepository = AppDataSource.getRepository(User);
+    const usersFound = await userRepository.find();
+
+    return res.json(usersFound);
   }
 
   async store(req: Request, res: Response) {
-    const userRepository = getRepository(User);
+    const userRepository = AppDataSource.getRepository(User);
     const { username, email, role } = req.body
 
     const userExists = await userRepository.findOne({ where: { email } })
@@ -17,7 +20,7 @@ class UserController {
       const user = userRepository.create({
         username,
         email,
-        role
+        role,
       });
 
       await userRepository.save(user)

@@ -1,14 +1,13 @@
 import { Request, Response } from 'express';
-import { getRepository, Repository } from 'typeorm';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
-import { User } from '../models/User';
-
+import { User } from '../entities/User';
+import { AppDataSource } from '../../data-source';
 class AuthController {
   async authenticate(req: Request, res: Response) {
-    const userRepository = getRepository(User);
     const { email } = req.body
+    const userRepository = AppDataSource.getRepository(User);
 
     const user = await userRepository.findOne({ where: { email } })
 
@@ -16,6 +15,8 @@ class AuthController {
       return res.sendStatus(401);
     }
 
+    // --------------------------------------------------------------------------------------
+    // quando o usuario tiver senha (habilitar este codigo e adaptar com usuario OAuth)
     // const isValidPassword = await bcrypt.compare(password, user.password)
 
     // if (!isValidPassword) {
@@ -24,7 +25,10 @@ class AuthController {
 
     // adicionar um dovEnv para guardar o secret, 
     // para fins de teste, deixarei aberto
-    const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: '1d' });
+    // --------------------------------------------------------------------------------------
+
+
+    const token = jwt.sign({ id: user.id }, process.env.SECRET_JWT, { expiresIn: '1d' });
 
     return res.json({
       user,

@@ -7,8 +7,8 @@ import UserController from './app/controllers/UserController';
 
 const router = Router();
 
+router.get('/users', UserController.index)
 router.post('/users', UserController.store);
-router.get('/users', authMiddleware, UserController.index)
 
 router.post('/auth', AuthController.authenticate);
 

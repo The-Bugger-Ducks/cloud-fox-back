@@ -6,7 +6,7 @@
   "password": "postgres",
   "database": "api_iv",
   "entities": [
-    "src/app/models/*.ts"
+    "src/app/entities/*.ts"
   ],
   "migrations": [
     "src/database/migrations/*.ts"
