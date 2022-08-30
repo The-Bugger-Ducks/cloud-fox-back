@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../../data-source';
 import { User } from '../entities/User';
+import { createUser, findUser } from '../services/users/userServices';
 
 class UserController {
   async index(req: Request, res: Response) {
@@ -10,26 +11,13 @@ class UserController {
     return res.json(usersFound);
   }
 
+  async show(req: Request, res: Response) {
+    const { id } = req.params;
+    return res.json(await findUser(req, res, id));
+  }
+
   async store(req: Request, res: Response) {
-    const userRepository = AppDataSource.getRepository(User);
-    const { username, email, role } = req.body
-
-    const userExists = await userRepository.findOne({ where: { email } })
-
-    if (!userExists) {
-      const user = userRepository.create({
-        username,
-        email,
-        role,
-      });
-
-      await userRepository.save(user)
-
-      return res.json(user);
-    } else {
-      return res.sendStatus(409);
-    }
-
+    return await createUser(req, res);
   }
 }
 
