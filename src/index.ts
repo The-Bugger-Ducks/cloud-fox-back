@@ -2,9 +2,20 @@ import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
 import * as dotenv from 'dotenv'
-dotenv.config()
+dotenv.config();
+import { AppDataSource } from "./data-source"
 
-import "./database/connect";
+// establish database connection
+AppDataSource
+  .initialize()
+  .then(() => {
+    console.log("Data Source has been initialized!")
+  })
+  .catch((err) => {
+    console.error("Error during Data Source initialization:", err)
+  })
+
+// import "./database/connect";
 import routes from './routes';
 
 const PORT = process.env.PORT || 3333
