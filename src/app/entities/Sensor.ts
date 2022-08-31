@@ -31,13 +31,13 @@ export class Sensor{
     unit: string;
 
   
-    @Column({
-      type: "enum",
-      enum: DataAccess,
-      default: DataAccess.PUBLIC,
-      nullable: false,
-    })
-    role: DataAccess
+    // @Column({
+    //   type: "enum",
+    //   enum: DataAccess,
+    //   default: DataAccess.PUBLIC,
+    //   nullable: false,
+    // })
+    // role: DataAccess
 
 
     @ManyToOne(() => Station, station => station.sensor)
