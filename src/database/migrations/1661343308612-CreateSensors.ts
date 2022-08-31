@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm"
+import { MigrationInterface, QueryRunner, Table, TableColumn, TableForeignKey } from "typeorm"
 
 export class CreateSensors1661343308612 implements MigrationInterface {
 
@@ -14,13 +14,57 @@ export class CreateSensors1661343308612 implements MigrationInterface {
         generationStrategy: "uuid"
       },
       {
-        name: "name",
+        name: "model",
         type: "varchar"
-      },]
+      },
+      {
+        name: "minRange",
+        type: 'float',
+      },
+      {
+        name: "maxRange",
+        type: 'float'
+      },
+      {
+        name: "accuracy",
+        type: 'float'
+      },
+      {
+        name: "startDate",
+        type: "timestamp"
+      },
+      {
+        name: "endDate",
+        type: "timestamp"
+      },
+      {
+        name: "unit",
+        type: 'varchar'
+      },
+      ]
     }));
+
+    await queryRunner.addColumn(
+      "sensors",
+      new TableColumn({
+        name: "stationId",
+        type: "uuid",
+      }),
+    )
+
+    await queryRunner.createForeignKey(
+      "sensors",
+      new TableForeignKey({
+        columnNames: ["stationId"],
+        referencedColumnNames: ["id"],
+        referencedTableName: "sensors",
+        onDelete: "CASCADE",
+      }),
+    )
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropTable('sensors');
   }
 
 }

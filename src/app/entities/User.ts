@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { UserRole } from '../enums/UserRoleEnum';
 
 @Entity('users')
-class User {
+export class User {
   @PrimaryGeneratedColumn('increment')
   id: string;
 
@@ -28,5 +28,3 @@ class User {
     }
   }
 }
-
-export { User };
