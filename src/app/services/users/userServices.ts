@@ -70,7 +70,9 @@ export async function deleteUser(req: Request, res: Response) {
 
   if (!userFound) {
     return {
-      "message": "Usuário não encontrado",
+      "message": {
+        "error": "Usuário não encontrado",
+      },
       "status": 404
     }
   }
