@@ -21,6 +21,7 @@ export class CreateUsersTable1621197196787 implements MigrationInterface {
         {
           name: "email",
           type: "varchar",
+          isNullable: false,
           isUnique: true
         },
         {

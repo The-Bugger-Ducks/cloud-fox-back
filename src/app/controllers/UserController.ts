@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../../data-source';
+
 import { User } from '../entities/User';
-import { createUser, findUser } from '../services/users/userServices';
+
+import { createUser, findUser, deleteUser } from '../services/users/userServices';
 
 class UserController {
   async index(req: Request, res: Response) {
@@ -12,12 +14,18 @@ class UserController {
   }
 
   async show(req: Request, res: Response) {
-    const { id } = req.params;
-    return res.json(await findUser(req, res, id));
+    const findResponse = await findUser(req, res)
+    return res.status(findResponse.status).json(findResponse.message);
   }
 
   async store(req: Request, res: Response) {
-    return await createUser(req, res);
+    const createResponse = await createUser(req, res);
+    return res.status(createResponse.status).json(createResponse.message)
+  }
+
+  async delete(req: Request, res: Response) {
+    const deleteResponse = await deleteUser(req, res);
+    return res.status(deleteResponse.status).json(deleteResponse.message);
   }
 }
 
