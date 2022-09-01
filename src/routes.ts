@@ -9,16 +9,17 @@ import StationController  from './app/controllers/StationController';
 
 const router = Router();
 
-router.get('/users', UserController.index)
+
+router.get('/users', UserController.index);
+router.get('/users/:id', UserController.show);
 router.post('/users', UserController.store);
+router.delete('/users', UserController.delete);
 
 router.get('/stations', StationController.index)
-router.post('/stations', StationController.create);
-router.post('/stations', StationController.createSensor);
+router.post('/stations', StationController.stationCreate);
+// router.post('/stations', StationController.sensorCreate);
 
 router.post('/auth', AuthController.authenticate);
-
-
 
 
 

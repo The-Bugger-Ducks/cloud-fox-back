@@ -1,56 +1,43 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { UserRole } from "../enums/UserRoleEnum";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import { DataAccess } from "../enums/DataAccessEnum";
-import { Station } from "./Station";
+import { Collect } from './Collect';
+import { Station } from './Station';
 
-@Entity('')
-export class Sensor{
-    @PrimaryGeneratedColumn('increment')
-    id: string;
-  
-    @Column()
-    model: string;
-  
-    @Column("float")
-    minrange: number;
+@Entity('sensors')
+export class Sensor {
+  @PrimaryGeneratedColumn('increment')
+  id: string;
 
-    @Column("float")
-    maxrange: number;
+  @Column()
+  model: string;
 
-    @Column("float")
-    accurace: number;
+  @Column()
+  minRange: number;
 
-    @CreateDateColumn({name: 'start_date'})
-    start_date: Date
+  @Column()
+  maxRange: number;
 
-    @CreateDateColumn({name: 'end_date'})
-    end_date:Date
+  @Column()
+  accuracy: number;
 
-    @Column()
-    unit: string;
+  @Column()
+  startDate: Date;
 
-  
-    // @Column({
-    //   type: "enum",
-    //   enum: DataAccess,
-    //   default: DataAccess.PUBLIC,
-    //   nullable: false,
-    // })
-    // role: DataAccess
+  @Column()
+  endDate: Date;
 
+  @Column()
+  unit: string;
 
-    @ManyToOne(() => Station, station => station.sensor)
-    @JoinColumn({name: 'idstation'})
-    station: Station;
-    
-  
-  
-    constructor() {
-      if (!this.id) {
-        this.id = uuid();
-      }
+  @ManyToOne(() => Station, (station) => station.sensors)
+  station: Station;
+
+  @OneToMany(() => Collect, (collect) => collect.sensor)
+  collects: Collect[];
+
+  constructor() {
+    if (!this.id) {
+      this.id = uuid();
     }
-
-
+  }
 }

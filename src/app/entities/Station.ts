@@ -1,31 +1,27 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { Sensor } from "./Sensor";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { v4 as uuid } from 'uuid';
+import { Sensor } from './Sensor';
 
+@Entity('stations')
+export class Station {
+  @PrimaryGeneratedColumn('increment')
+  id: string;
 
+  @Column()
+  lat: number;
 
-@Entity('')
-export class Station{
-    @PrimaryGeneratedColumn('increment')
-    id: string;
-  
-    @Column("float")
-    lat: number;
-  
-    @Column("float")
-    long: number;
+  @Column()
+  lon: number;
 
-    @Column()
-    localReference: string;
+  @Column()
+  localReference: string;
 
+  @OneToMany(() => Sensor, (sensor) => sensor.station)
+  sensors: Sensor[];
 
-    @OneToMany(() =>  Sensor,(sensor) => sensor.station)
-    sensor: Sensor[]
-
-    constructor() {
-        if (!this.id) {
-          this.id = uuid();
-        }
-      }
-  
+  constructor() {
+    if (!this.id) {
+      this.id = uuid();
+    }
+  }
 }

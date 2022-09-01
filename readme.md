@@ -24,7 +24,7 @@ $ git clone https://github.com/The-Bugger-Ducks/weather-fox-back.git
 $ cd weather-fox-back
 
 # criar um arquivo chamado ".env" e copiar a estrutura do arquivo ".env.example" e colocar seus respectivos dados
-![image](https://user-images.githubusercontent.com/55204419/186800014-710b4a64-28ec-4d5d-b87c-16d699dc1bb3.png)
+
 
 # Utilize o docker-compose para criar o banco de dados
 $ docker-compose up -d
@@ -37,6 +37,8 @@ $ yarn start
 ```
 
 O servidor inciará localmente na porta 3000 (citada no arquivo .env). Use o Insomnia para simular requisições e respostas das rotas (pelo link [https://localhost:3000](https://localhost:3000)) ou utilize o projeto fron-end do "Weather Fox" para executar as funcionalidades da aplicação (acesse o repositório por [este link](https://github.com/The-Bugger-Ducks/fox-front)).
+
+<!-- ![image](https://user-images.githubusercontent.com/55204419/186800014-710b4a64-28ec-4d5d-b87c-16d699dc1bb3.png) -->
 
 ## :railway_track: Rotas disponíveis
 <div align="center">
