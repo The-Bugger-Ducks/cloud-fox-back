@@ -1,0 +1,184 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "User authentication microservice",
+    "description": "This api has objective get data from meteorologic station",
+    "contact": {
+      "email": "bugger-ducker-lab@gmail.com"
+    },
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/",
+      "description": "API of developers"
+    }
+  ],
+  "paths": {
+    "/users/": {
+      "get": {
+        "summary": "Get All Users",
+        "description": "This route has objective to get all users",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create user account",
+        "description": "This route has objective to create user in system",
+        "tags": [
+          "User"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUser"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "username": "Gabriel",
+                    "email": "gabriel.camargo@outlook.com",
+                    "role": "common"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "209": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "message": "Email já existente!"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/users/{id}": {
+    "put": {
+      "summary": "Get All Users",
+      "description": "This route has objective to get all users",
+      "tags": [
+        "User"
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "delete": {
+      "summary": "Delete User",
+      "description": "This route has objective to delete a users from system",
+      "tags": [
+        "User"
+      ],
+      "responses": {
+        "200": {
+          "description": "Usuário deletado com sucesso!",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": "Usuário deletado com sucesso"
+                }
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Usuário deletado com sucesso!",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": "Usuário não encontrado"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateUser": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
