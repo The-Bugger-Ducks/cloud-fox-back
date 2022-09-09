@@ -10,8 +10,8 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/",
-      "description": "API of developers"
+      "url": "http://localhost:3000",
+      "description": "API"
     }
   ],
   "paths": {
@@ -20,7 +20,7 @@
         "summary": "Get All Users",
         "description": "This route has objective to get all users",
         "tags": [
-          "User"
+          "Users"
         ],
         "responses": {
           "200": {
@@ -42,7 +42,7 @@
         "summary": "Create user account",
         "description": "This route has objective to create user in system",
         "tags": [
-          "User"
+          "Users"
         ],
         "requestBody": {
           "content": {
@@ -85,24 +85,123 @@
           }
         }
       }
-    }
-  },
-  "/users/{id}": {
-    "put": {
-      "summary": "Get All Users",
-      "description": "This route has objective to get all users",
-      "tags": [
-        "User"
-      ],
-      "responses": {
-        "200": {
-          "description": "OK",
+    },
+    "/users/{id}/": {
+      "get": {
+        "summary": "Get One Users",
+        "description": "This route has objective to get one users",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Nome do produto para busca",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update One User",
+        "description": "This route has objective to update one user",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Nome do produto para busca",
+            "required": true
+          }
+        ],
+        "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/CreateUser"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "username": "Gabriel",
+                    "email": "gabriel.camargo@outlook.com",
+                    "role": "common"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete User",
+        "description": "This route has objective to delete a users from system",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Nome do produto para busca",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário deletado com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": "Usuário deletado com sucesso"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário deletado com sucesso!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": "Usuário não encontrado"
+                  }
                 }
               }
             }
@@ -110,34 +209,101 @@
         }
       }
     },
-    "delete": {
-      "summary": "Delete User",
-      "description": "This route has objective to delete a users from system",
-      "tags": [
-        "User"
-      ],
-      "responses": {
-        "200": {
-          "description": "Usuário deletado com sucesso!",
+    "/stations/": {
+      "get": {
+        "summary": "Get All Station",
+        "description": "This route has objective to get all station",
+        "tags": [
+          "Stations"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Station"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Station",
+        "description": "This route has objective to create station in system",
+        "tags": [
+          "Stations"
+        ],
+        "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "message": "Usuário deletado com sucesso"
+                "$ref": "#/components/schemas/CreateStation"
+              },
+              "examples": {
+                "station": {
+                  "value": {
+                    "id": "CB13A7",
+                    "startDate": 1662735600
+                  }
                 }
               }
             }
           }
         },
-        "404": {
-          "description": "Usuário deletado com sucesso!",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "error": "Usuário não encontrado"
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "209": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "message": "Email já existente!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stations/{id}/": {
+      "get": {
+        "summary": "Get One station",
+        "description": "This route has objective to get one station",
+        "tags": [
+          "Stations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Station Id for search",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "$ref": "#/components/schemas/Station"
+                  }
                 }
               }
             }
@@ -176,6 +342,40 @@
           },
           "role": {
             "type": "string"
+          }
+        }
+      },
+      "Station": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "lat": {
+            "type": "number"
+          },
+          "lon": {
+            "type": "number"
+          },
+          "localReference": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "timestamp"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateStation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "timestamp"
           }
         }
       }
