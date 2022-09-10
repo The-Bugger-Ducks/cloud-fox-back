@@ -18,10 +18,14 @@ router.post('/users', UserController.store);
 router.delete('/users', UserController.delete);
 
 router.get('/stations', StationController.index);
+router.get('/stations/:id', StationController.show);
 router.post('/stations', StationController.stationCreate);
+router.delete('/stations', StationController.stationDelete);
 
-router.post('/collects', CollectController.collectCreate)
-router.delete('/collects',CollectController.collectDelete)
+router.get('/collects', CollectController.index);
+router.get('/collects/:id', CollectController.show);
+router.post('/collects', CollectController.collectCreate);
+router.delete('/collects',CollectController.collectDelete);
 
 
 

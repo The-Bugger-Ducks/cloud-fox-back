@@ -1,16 +1,18 @@
 import { Request, Response } from 'express';
-import { createCollect, DeleteCollect } from '../services/users/collectService';
+import { CollectRepository } from '../../repositories/CollectRepository';
+import { createCollect, DeleteCollect, findCollects } from '../services/users/collectService';
 
 class CollectController{
-    // async index(req: Request, res: Response) {
-    //     const StationRepository = AppDataSource.getRepository(Station);
-    //     const usersFound = await StationRepository.find({
-    //         relations:{
-    //             collects: true
-    //         }
-    //     });
-    //     return res.json(usersFound);
-    //   }
+    async index(req: Request, res: Response) {
+        const usersFound = await CollectRepository.find();
+        return res.json(usersFound);
+    }
+
+
+    async show(req: Request, res: Response) {
+        const findResponse = await findCollects(req, res);
+        return res.status(findResponse.status).json(findResponse.message);
+    }
 
     async collectCreate(req: Request, res: Response){
         const createResponse = await createCollect(req,res);

@@ -29,7 +29,32 @@ export async function createStation(req: Request, res: Response){
 
 }
 
-export async function  deleteStation(req: Request, res: Response){
+
+export async function findStation(req: Request, res: Response) {
+    const { id } = req.params;
+  
+    try {
+      const stationFound = await StationRepository.findOne({
+        where: {
+          id,
+        },
+      });
+  
+      return {
+        "message": stationFound,
+        "status": 200
+      };
+    } catch (err) {
+      return {
+        "message": {
+          "error": "Estação não encontrada"
+        },
+        "status": 404
+      }
+    }
+
+}
+export async function deleteStation(req: Request, res: Response){
     const {id} = req.body
 
     const StationExist = await StationRepository.findOne({where:{id}})
@@ -37,7 +62,7 @@ export async function  deleteStation(req: Request, res: Response){
 
     if(!StationExist){
         return {
-            "message": "Coletor não existe",
+            "message": "Estação não existe",
             "status": 409
         }
     }
@@ -46,7 +71,7 @@ export async function  deleteStation(req: Request, res: Response){
         await StationRepository.delete({id})
 
         return {
-            "message": "Coletor foi deletado",
+            "message": "Estação foi deletada",
             "status": 201
         }
     } catch (error) {
