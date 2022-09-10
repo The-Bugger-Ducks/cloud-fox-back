@@ -1,94 +1,68 @@
 import { Request, Response } from 'express';
-import { AppDataSource } from '../../../data-source';
-import { SensorRepository } from "../../../repositories/SensorRepository"
 import { StationRepository } from "../../../repositories/StationRepository"
-import { Station } from '../../entities/Station';
+
 
 export async function createStation(req: Request, res: Response){
-    const userRepository = AppDataSource.getRepository(Station);
-    const {lat, lon, localReference, sensors} = req.body
+    const {lat, lon, startdate, name} = req.body;
+    
 
-    const hasStation = await userRepository.findOne({where: localReference})
+    const hasStation = await StationRepository.findOne({where: {name}})
 
     if(!hasStation){
-        const newStation = userRepository.create({
-            lat, lon, localReference, sensors
+        const newStation = StationRepository.create({
+            lat, lon, startdate, name
         })
-
+    
         await StationRepository.save(newStation)
+    
+        return{
+            "message": "Estação cadastrada com sucesso",
+            "status": 201
+        }
 
+    }else{
+        return {
+            "message": "Esta estação já existe",
+            "status": 409
+        }
     }
 
-    return{
-        "message": "Estação cadastrada com sucesso",
-        "status": 201
+}
+
+export async function  deleteStation(req: Request, res: Response){
+    const {id} = req.body
+
+    const StationExist = await StationRepository.findOne({where:{id}})
+
+
+    if(!StationExist){
+        return {
+            "message": "Coletor não existe",
+            "status": 409
+        }
     }
 
+    try {
+        await StationRepository.delete({id})
 
-}    
-
-
-
-// export async function createSensor(req: Request, res: Response) {
-//     const {sensors} = req.body
-
-//     try {
-//         const hasSensor = StationRepository.find(sensors)
-
-
-//         if (!hasSensor) {
-
-//             const {model, minRange, maxRange, accuracy, 
-//                 startDate, endDate, unit } = req.body
-
-
-                
-//             const newSensor = SensorRepository.create({
-//                 model, minRange, maxRange, accuracy, 
-//                 startDate, endDate, unit 
-//             })
-
-//             await SensorRepository.save(newSensor)
-
-//             return {
-//                 "message": "Estação cadastrada",
-//                 "status": 201
-//               }
-   
-//         }else {
-//             return {
-//                 "message": "Este sensor já existe",
-//                 "status": 409
-//             }
-//         }
-//     } catch (error) {
-//         console.log(error);
-//         return {
-//             "status": 500
-//           }       
-//     }
-// }
-
-//     if(!hasSensor) {
-
-//         const {model, minRange, maxRange, accuracy, 
-//             startDate, endDate, unit, station } = req.body
+        return {
+            "message": "Coletor foi deletado",
+            "status": 201
+        }
+    } catch (error) {
+        console.log(error);
         
-//         const newSensor = SensorRepository.create({
-//             model, minRange, maxRange, accuracy, 
-//             startDate, endDate, unit
-//         })
+        
+    }
 
-//         await SensorRepository.save(newSensor)
-//     } else if(hasSensor){
-//         return {
-//             "message": {
-//               "error": "Este sensor já existe"
-//             },
-//             "status": 409
-//           }
+    
+}
 
-//     }
 
-// }
+
+
+
+
+
+
     
