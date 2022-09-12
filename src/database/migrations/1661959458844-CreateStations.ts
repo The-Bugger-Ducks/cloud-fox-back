@@ -23,9 +23,13 @@ export class CreateStations1661959458844 implements MigrationInterface {
           type: "float"
         },
         {
-          name: "localReference",
+          name: "name",
           type: "varchar"
-        }
+        },
+        {
+          name: "startdate",
+          type: "timestamp",
+        },
       ]
     }));
   }

@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import { Sensor } from './Sensor';
+import { Station } from './Station';
 
 @Entity('collects')
 export class Collect {
@@ -11,10 +11,37 @@ export class Collect {
   moment: Date;
 
   @Column()
-  value: number;
+  pluvValue: number;
 
-  @ManyToOne(() => Sensor, (sensor) => sensor.collects)
-  sensor: Sensor;
+  @Column()
+  pluvUnit: string;
+
+  @Column()
+  heatValue: number;
+
+  @Column()
+  heatUnit: string;
+
+  @Column()
+  atmPresValue: number;
+
+  @Column()
+  atmPresUnit: string;
+
+  @Column()
+  humidityValue: number;
+
+  @Column()
+  humidityUnit: string;
+
+  @Column()
+  WindDirection: string;
+
+  @Column()
+  WindVelocity: number;
+
+  @ManyToOne(() => Station, (station) => station.collects)
+  station: Station;
 
   constructor() {
     if (!this.id) {

@@ -14,13 +14,13 @@ class UserController {
   }
 
   async show(req: Request, res: Response) {
-    const findResponse = await findUser(req, res)
+    const findResponse = await findUser(req, res);
     return res.status(findResponse.status).json(findResponse.message);
   }
 
   async store(req: Request, res: Response) {
     const createResponse = await createUser(req, res);
-    return res.status(createResponse.status).json(createResponse.message)
+    return res.status(createResponse.status).json(createResponse.message);
   }
 
   async delete(req: Request, res: Response) {
