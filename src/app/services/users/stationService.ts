@@ -63,7 +63,7 @@ export async function deleteStation(req: Request, res: Response){
     if(!StationExist){
         return {
             "message": "Estação não existe",
-            "status": 409
+            "status": 404
         }
     }
 
@@ -72,7 +72,7 @@ export async function deleteStation(req: Request, res: Response){
 
         return {
             "message": "Estação foi deletada",
-            "status": 201
+            "status": 200
         }
     } catch (error) {
         console.log(error);

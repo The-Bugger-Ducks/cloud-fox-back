@@ -75,7 +75,7 @@ export async function DeleteCollect(req: Request, res: Response) {
     if(!hasCollect){
         return {
             "message": "Coletor não existe",
-            "status": 409
+            "status": 404
         }
     }
 
@@ -84,7 +84,7 @@ export async function DeleteCollect(req: Request, res: Response) {
 
         return {
             "message": "Coletor foi deletado",
-            "status": 201
+            "status": 200
         }
     } catch (error) {
         console.log(error);
