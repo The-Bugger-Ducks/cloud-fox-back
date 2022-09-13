@@ -6,6 +6,7 @@ import AuthController from './app/controllers/AuthController';
 import UserController from './app/controllers/UserController';
 import StationController from './app/controllers/StationController';
 import CollectController from './app/controllers/CollectController';
+import DashboardController from './app/controllers/DashboardController';
 
 
 
@@ -28,7 +29,7 @@ router.get('/collects/:id', CollectController.show);
 router.post('/collects', CollectController.collectCreate);
 router.delete('/collects/:id', CollectController.collectDelete);
 
-
+router.get('/dashboard', DashboardController.getParameters);
 
 
 
