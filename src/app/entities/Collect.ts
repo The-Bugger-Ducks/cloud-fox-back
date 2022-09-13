@@ -8,7 +8,7 @@ export class Collect {
   id: string;
 
   @Column()
-  moment: Date;
+  moment: number;
 
   @Column()
   pluvValue: number;

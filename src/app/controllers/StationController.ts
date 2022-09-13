@@ -1,15 +1,14 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../../data-source';
-import { StationRepository } from '../../repositories/StationRepository';
 import { Station } from '../entities/Station';
-import { createStation, deleteStation, findStation } from '../services/users/stationService';
+import { activateStation, createStation, deleteStation, findStation } from '../services/stationService';
 
 
-class StationController{
+class StationController {
     async index(req: Request, res: Response) {
         const StationRepository = AppDataSource.getRepository(Station);
         const usersFound = await StationRepository.find({
-            relations:{
+            relations: {
                 collects: true
             }
         });
@@ -21,13 +20,18 @@ class StationController{
         return res.status(findResponse.status).json(findResponse.message);
     }
 
-    async stationCreate(req: Request, res: Response){
-        const createResponse = await createStation(req,res);
+    async stationCreate(req: Request, res: Response) {
+        const createResponse = await createStation(req, res);
         return res.status(createResponse.status).json(createResponse.message);
     }
 
-    async stationDelete(req: Request, res: Response){
-        const deleteResponse = await deleteStation(req,res);
+    async stationActivate(req: Request, res: Response) {
+        const activateResponse = await activateStation(req, res);
+        return res.status(activateResponse.status).json(activateResponse.message);
+    }
+
+    async stationDelete(req: Request, res: Response) {
+        const deleteResponse = await deleteStation(req, res);
         return res.status(deleteResponse.status).json(deleteResponse.message);
     }
 

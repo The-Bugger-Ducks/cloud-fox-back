@@ -3,7 +3,7 @@ import { AppDataSource } from '../../data-source';
 
 import { User } from '../entities/User';
 
-import { createUser, findUser, deleteUser } from '../services/users/userServices';
+import { createUser, findUser, deleteUser } from '../services/userServices';
 
 class UserController {
   async index(req: Request, res: Response) {

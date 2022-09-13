@@ -1,4 +1,4 @@
 export enum DataAccess {
-    PUBLIC = "public",
-    PRIVATE = "private"
-  }
+  PUBLIC = "public",
+  PRIVATE = "private"
+}

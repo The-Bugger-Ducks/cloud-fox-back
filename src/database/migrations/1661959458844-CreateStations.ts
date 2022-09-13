@@ -3,33 +3,40 @@ import { MigrationInterface, QueryRunner, Table } from "typeorm"
 export class CreateStations1661959458844 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
     await queryRunner.createTable(new Table({
       name: "stations",
       columns: [
         {
           name: 'id',
-          type: 'uuid',
+          type: 'varchar',
           isPrimary: true,
-          isGenerated: true,
-          generationStrategy: "uuid"
+          isNullable: false
         },
         {
           name: "lat",
           type: "float",
+          isNullable: true
         },
         {
           name: "lon",
-          type: "float"
+          type: "float",
+          isNullable: true
         },
         {
-          name: "name",
-          type: "varchar"
+          name: "description",
+          type: "varchar",
+          isNullable: true
         },
         {
           name: "startdate",
-          type: "timestamp",
+          type: "bigInt",
+          isNullable: true
         },
+        {
+          name: "isActive",
+          type: "boolean",
+          default: false
+        }
       ]
     }));
   }
