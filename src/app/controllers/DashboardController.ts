@@ -5,7 +5,7 @@ import { StationRepository } from "../../repositories/StationRepository";
 import { getAllParams, getAtmPressureParams, getHeatParams, getHumidityParams, getPluvParams, getWindParams } from "../services/dashboardService";
 
 class DashboardController {
-	async getParameters(req: Request, res: Response) {
+	async getSingleOrAllParameters(req: Request, res: Response) {
 		const { parameter } = req.body;
 
 		try {
