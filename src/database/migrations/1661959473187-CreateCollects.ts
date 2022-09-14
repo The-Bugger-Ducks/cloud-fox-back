@@ -57,12 +57,20 @@ export class CreateCollects1661959473187 implements MigrationInterface {
           type: "varchar"
         },
         {
-          name: "WindDirection",
+          name: "WindDirectionValue",
           type: "float"
         },
         {
-          name: "WindVelocity",
+          name: "WindDirectionUnit",
+          type: "varchar"
+        },
+        {
+          name: "WindVelocityValue",
           type: "float"
+        },
+        {
+          name: "WindVelocityUnit",
+          type: "varchar"
         }
       ]
     }));

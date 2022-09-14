@@ -12,33 +12,33 @@ export class Collect {
 
   @Column()
   pluvValue: number;
-
   @Column()
   pluvUnit: string;
 
   @Column()
   heatValue: number;
-
   @Column()
   heatUnit: string;
 
   @Column()
   atmPresValue: number;
-
   @Column()
   atmPresUnit: string;
 
   @Column()
   humidityValue: number;
-
   @Column()
   humidityUnit: string;
 
   @Column()
-  WindDirection: string;
+  WindDirectionValue: number;
+  @Column()
+  WindDirectionUnit: string;
 
   @Column()
-  WindVelocity: number;
+  WindVelocityValue: number;
+  @Column()
+  WindVelocityUnit: string;
 
   @ManyToOne(() => Station, (station) => station.collects)
   station: Station;

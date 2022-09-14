@@ -4,9 +4,7 @@ import { StationRepository } from './../../repositories/StationRepository';
 
 
 export async function createCollect(req: Request, res: Response) {
-  const { moment, pluvValue, pluvUnit, heatValue,
-    heatUnit, atmPresValue, atmPresUnit, humidityValue,
-    humidityUnit, WindDirection, WindVelocity, station } = req.body
+  const { moment, station } = req.body
 
   if (!await StationRepository.findOne({ where: { id: station } })) {
     const newStation = StationRepository.create({ id: station });
@@ -15,20 +13,13 @@ export async function createCollect(req: Request, res: Response) {
 
   const hasCollect = await CollectRepository.findOne({ where: { moment } })
   if (!hasCollect) {
-    const newCollect = CollectRepository.create({
-      moment, pluvValue, pluvUnit, heatValue,
-      heatUnit, atmPresValue, atmPresUnit, humidityValue,
-      humidityUnit, WindDirection, WindVelocity, station
-
-    })
+    const newCollect = CollectRepository.create(req.body);
 
     await CollectRepository.save(newCollect)
-
     return {
       "message": "Coletor cadastrada com sucesso",
       "status": 201
     }
-
 
   } else {
     return {
