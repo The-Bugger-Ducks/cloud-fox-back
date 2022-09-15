@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import { Sensor } from './Sensor';
+import { Collect } from './Collect';
+
 
 @Entity('stations')
 export class Station {
@@ -14,10 +15,13 @@ export class Station {
   lon: number;
 
   @Column()
-  localReference: string;
+  name: string;
 
-  @OneToMany(() => Sensor, (sensor) => sensor.station)
-  sensors: Sensor[];
+  @Column()
+  startdate: Date;
+
+  @OneToMany(() => Collect, (collect) => collect.station)
+  collects: Collect[];
 
   constructor() {
     if (!this.id) {

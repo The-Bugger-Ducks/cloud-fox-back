@@ -231,58 +231,12 @@
             }
           }
         }
-      },
-      "post": {
-        "summary": "Create Station",
-        "description": "This route has objective to create station in system",
-        "tags": [
-          "Stations"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateStation"
-              },
-              "examples": {
-                "station": {
-                  "value": {
-                    "id": "CB13A7",
-                    "startDate": 1662735600
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "209": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "message": "Email já existente!"
-                }
-              }
-            }
-          }
-        }
       }
     },
     "/stations/{id}/": {
-      "get": {
-        "summary": "Get One station",
-        "description": "This route has objective to get one station",
+      "put": {
+        "summary": "Activate One Station",
+        "description": "This route has objective to activate a station",
         "tags": [
           "Stations"
         ],
@@ -303,6 +257,73 @@
                   "type": "object",
                   "properties": {
                     "$ref": "#/components/schemas/Station"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Activate One Station",
+        "description": "This route has objective to activate a station",
+        "tags": [
+          "Stations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Station Id for search",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": "Estação deletada com sucesso"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dashboard/": {
+      "get": {
+        "summary": "Get Parameters from stations collects",
+        "description": "This route has objective to get data from stations",
+        "tags": [
+          "Stations"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "$ref": "#/components/schemas/Dashboard"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": "Usuário não encontrado"
                   }
                 }
               }
@@ -365,17 +386,6 @@
           },
           "isActive": {
             "type": "boolean"
-          }
-        }
-      },
-      "CreateStation": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "startDate": {
-            "type": "timestamp"
           }
         }
       }
