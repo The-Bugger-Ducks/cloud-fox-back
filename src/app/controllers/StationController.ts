@@ -12,19 +12,12 @@ class StationController {
       const usersFound = await StationRepository.find({
         where: {
           isActive: true
-        },
-        relations: {
-          collects: true
         }
       });
       return res.json(usersFound);
     }
 
-    const usersFound = await StationRepository.find({
-      relations: {
-        collects: true
-      }
-    });
+    const usersFound = await StationRepository.find();
     return res.json(usersFound);
   }
 
