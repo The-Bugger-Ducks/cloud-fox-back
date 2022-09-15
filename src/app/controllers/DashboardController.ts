@@ -15,7 +15,7 @@ class DashboardController {
 				collects = await getHeatParams(req, res);
 			} else if (parameter === 'pluv') {
 				collects = await getPluvParams(req, res);
-			} else if (parameter === 'umidity') {
+			} else if (parameter === 'humidity') {
 				collects = await getHumidityParams(req, res);
 			} else if (parameter === 'wind') {
 				collects = await getWindParams(req, res);
