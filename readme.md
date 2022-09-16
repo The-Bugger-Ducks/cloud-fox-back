@@ -49,7 +49,7 @@ O servidor inciará localmente na porta 3000 (citada no arquivo .env). Use o Ins
 |    [![](https://img.shields.io/badge/GET-2E8B57?style=for-the-badge)]() | `/users/`                          | Listagem de usuários            |
 |    [![](https://img.shields.io/badge/GET-2E8B57?style=for-the-badge)]() | `/users/{userId}`                  | Dados de um usuário específico  |
 |   [![](https://img.shields.io/badge/POST-4682B4?style=for-the-badge)]() | `/users/`                          | Cadastro de usuários            |
-|    [![](https://img.shields.io/badge/PUT-9370DB?style=for-the-badge)]() | `/users/update`                    | Alteração dos dados do usuário  |
+|    [![](https://img.shields.io/badge/PUT-9370DB?style=for-the-badge)]() | `/users/solicitation`              | Alteração do perfil do usuário  |
 | [![](https://img.shields.io/badge/DELETE-CD853F?style=for-the-badge)]() | `/users/{userId}`                  | Exclusão de um usuário específico|
 |   <hr>                                                                  | <hr>                               | **Controle de estações**        |
 |    [![](https://img.shields.io/badge/GET-2E8B57?style=for-the-badge)]() | `/stations/`                       | Listagem de estações            |
