@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import { AppDataSource } from '../../data-source';
 import { SolicitationRepository } from '../../repositories/SolicitationRepository';
 import { Solicitation } from '../entities/Solicitation';
-import { createSolicitation, deleteSolicitation } from "../services/users/solicitationService";
+import { createSolicitation, deleteSolicitation } from '../services/solicitationService';
+
 
 class SolicitationController{
 

@@ -1,49 +1,55 @@
 import { Request, Response } from 'express';
-import { AppDataSource } from '../../../data-source';
-import { SolicitationRepository } from '../../../repositories/SolicitationRepository';
-import { UserRepository } from '../../../repositories/UserRepository';
-import { User } from '../../entities/User';
+import { SolicitationRepository } from '../../repositories/SolicitationRepository';
+import { UserRepository } from '../../repositories/UserRepository';
+
 
 
 
 export async function createSolicitation(req: Request, res: Response) {
     const {roleReq, user} = req.body 
 
-    const hasUser = await UserRepository.findOneBy({id:user})
+    const hasUser = await UserRepository.findOne({ 
+        relations:{
+            solicitations:true
+        },
+        where:{id:user}
+        })
 
-    const hasSolicitation = await SolicitationRepository.findOneBy({id:user})
+    
 
-    const hasRole = await UserRepository.findOneBy({id:user})
+    if (!hasUser) {
+        return{
+            "message": "Esse usuário não foi encontrado",
+            "status": 404
+        }       
+    }
 
-    if(hasRole.role == roleReq){
+
+    
+    if (hasUser.solicitations || hasUser.solicitations != null) {
+        return{
+            "message": "Essa solicitação já existe",
+            "status": 409
+        }       
+    }
+
+    if(hasUser.role == roleReq){
         return {
             "message": "Você já possuí este nível de acesso",
             "status": 400
         }
-
     }
 
-    if(!hasSolicitation && hasUser){
 
+    const newSolicitation = SolicitationRepository.create({
+       roleReq, user
+    })
+    await SolicitationRepository.save(newSolicitation)
+    return {
+        "message": "Solicitação criada",
+        "status": 201
+    }    
 
-        const newSolicitation = SolicitationRepository.create({
-           roleReq, user
-        })
-
-        await SolicitationRepository.save(newSolicitation)
-        return {
-            "message": "Solicitação criada",
-            "status": 201
-        }
-
-
-        
-    } else{
-        return {
-            "message": "Solicitação já existe ",
-            "status": 409
-        }
-    }
 }
 
 

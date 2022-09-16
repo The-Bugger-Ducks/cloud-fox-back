@@ -1,12 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { v4 as uuid } from 'uuid';
+import { Entity, Column, OneToMany, PrimaryColumn } from 'typeorm';
 import { Collect } from './Collect';
 import { Solicitation } from './Solicitation';
 
 
 @Entity('stations')
 export class Station {
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryColumn({
+    default: false,
+    nullable: false,
+  })
   id: string;
 
   @Column()
@@ -16,18 +18,14 @@ export class Station {
   lon: number;
 
   @Column()
-  name: string;
+  description: string;
 
   @Column()
-  startdate: Date;
+  startdate: number;
+
+  @Column()
+  isActive: boolean;
 
   @OneToMany(() => Collect, (collect) => collect.station)
   collects: Collect[];
-
-
-  constructor() {
-    if (!this.id) {
-      this.id = uuid();
-    }
-  }
 }
