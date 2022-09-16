@@ -16,7 +16,7 @@ export class CreateCollects1661959473187 implements MigrationInterface {
         },
         {
           name: "moment",
-          type: "timestamp",
+          type: "bigInt",
           isUnique: true
         },
         {
@@ -57,13 +57,21 @@ export class CreateCollects1661959473187 implements MigrationInterface {
           type: "varchar"
         },
         {
-          name: "WindDirection",
+          name: "WindDirectionValue",
+          type: "float"
+        },
+        {
+          name: "WindDirectionUnit",
           type: "varchar"
         },
         {
-          name: "WindVelocity",
+          name: "WindVelocityValue",
           type: "float"
-        }      
+        },
+        {
+          name: "WindVelocityUnit",
+          type: "varchar"
+        }
       ]
     }));
 
@@ -72,7 +80,7 @@ export class CreateCollects1661959473187 implements MigrationInterface {
       "collects",
       new TableColumn({
         name: "stationId",
-        type: "uuid",
+        type: "varchar",
       }),
     )
 
