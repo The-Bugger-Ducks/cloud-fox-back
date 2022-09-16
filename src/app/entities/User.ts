@@ -16,7 +16,7 @@ export class User {
   @Column({
     type: "enum",
     enum: UserRole,
-    default: UserRole.COMMON,
+    default: UserRole.SIMPLE,
     nullable: false,
   })
   role: UserRole

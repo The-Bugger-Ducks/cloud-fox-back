@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { AppDataSource } from "../../../data-source";
-import { User } from "../../entities/User";
+import { AppDataSource } from "../../data-source";
+import { User } from "../entities/User";
 
 export async function findUser(req: Request, res: Response) {
   const { id } = req.params;
@@ -59,7 +59,7 @@ export async function createUser(req: Request, res: Response) {
 }
 
 export async function deleteUser(req: Request, res: Response) {
-  const { id } = req.body;
+  const { id } = req.params;
   const userRepository = AppDataSource.getRepository(User);
 
   const userFound = await userRepository.findOne({
