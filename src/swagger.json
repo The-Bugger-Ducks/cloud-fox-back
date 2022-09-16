@@ -158,6 +158,17 @@
         "tags": [
           "Stations"
         ],
+        "parameters": [
+          {
+            "name": "isActive",
+            "description": "Colocar na URL ?isActive=true se desejar somente estações ativas",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -266,6 +277,19 @@
                   "type": "object",
                   "properties": {
                     "message": "coleta cadastrada com sucesso"
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": "Conflito,horario já cadastrado"
                   }
                 }
               }

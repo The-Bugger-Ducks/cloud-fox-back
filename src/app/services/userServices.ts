@@ -49,8 +49,8 @@ export async function createUser(req: Request, res: Response) {
     };
   } else {
     return {
-      "response": "Este e-mail já foi usado!",
-      "status": 409
+      "message": userExists,
+      "status": 200
     };
   }
 }
