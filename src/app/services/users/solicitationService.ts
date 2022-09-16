@@ -18,7 +18,7 @@ export async function createSolicitation(req: Request, res: Response) {
     if(hasRole.role == roleReq){
         return {
             "message": "Você já possuí este nível de acesso",
-            "status": 406
+            "status": 400
         }
 
     }
@@ -51,7 +51,14 @@ export async function createSolicitation(req: Request, res: Response) {
 export async function deleteSolicitation(req: Request, res: Response) {
     const {id, role, user} = req.body
 
-    const hasSolicitation = await SolicitationRepository.findOneBy({id})
+    const hasSolicitation = await SolicitationRepository.findOne({
+        relations:{
+            user:true,
+        },
+        where:{id}
+
+    })
+
 
     if(!hasSolicitation){
         return {
@@ -60,7 +67,16 @@ export async function deleteSolicitation(req: Request, res: Response) {
         }
     }
 
+    if(hasSolicitation.roleReq != role){
+        return{
+            "message": "A permissão esta incondizente com a solicitação",
+            "status": 400
+        }
+
+    }
     const hasUser = await UserRepository.findOneBy({id:user})
+
+
 
     if (!hasUser) {
         await SolicitationRepository.delete({id})
@@ -69,6 +85,7 @@ export async function deleteSolicitation(req: Request, res: Response) {
             "status": 200
         }
     }else{
+
         hasUser.role = role ? role : hasUser.role
         await UserRepository.save(hasUser)            
         await SolicitationRepository.delete({id})

@@ -18,17 +18,13 @@ export class createSolicitation1663173930386 implements MigrationInterface {
               name: "roleReq",
               type: "varchar"
             },
+            {
+              name: "userId",
+              type: "uuid"
+            }
             
           ],
         }));
-
-        await queryRunner.addColumn(
-            "solicitations",
-            new TableColumn({
-              name: "userId",
-              type: "uuid",
-            }),
-          )
 
         await queryRunner.createForeignKey(
             "solicitations",

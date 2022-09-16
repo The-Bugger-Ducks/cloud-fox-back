@@ -7,7 +7,11 @@ import { createSolicitation, deleteSolicitation } from "../services/users/solici
 class SolicitationController{
 
     async index(req: Request, res: Response) {
-        const solicitationsFound = await SolicitationRepository.find();
+        const solicitationsFound = await SolicitationRepository.find({
+            relations:{
+                user:true
+            }
+        });
         return res.json(solicitationsFound);
     }
 
