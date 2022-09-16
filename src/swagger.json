@@ -72,16 +72,6 @@
                 }
               }
             }
-          },
-          "209": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "message": "Email já existente!"
-                }
-              }
-            }
           }
         }
       }
@@ -101,54 +91,6 @@
             "required": true
           }
         ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "$ref": "#/components/schemas/User"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "summary": "Update One User",
-        "description": "This route has objective to update one user",
-        "tags": [
-          "Users"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Nome do produto para busca",
-            "required": true
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUser"
-              },
-              "examples": {
-                "user": {
-                  "value": {
-                    "username": "Gabriel",
-                    "email": "gabriel.camargo@outlook.com",
-                    "role": "common"
-                  }
-                }
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "OK",
@@ -265,8 +207,8 @@
         }
       },
       "delete": {
-        "summary": "Activate One Station",
-        "description": "This route has objective to activate a station",
+        "summary": "Delete One Station",
+        "description": "This route has objective to delete a station",
         "tags": [
           "Stations"
         ],
@@ -291,16 +233,29 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": "Estação não encontrada"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/dashboard/": {
-      "get": {
-        "summary": "Get Parameters from stations collects",
-        "description": "This route has objective to get data from stations",
+    "/collects/": {
+      "post": {
+        "summary": "Register parameters from sensors",
+        "description": "This route has objective to register parameters from sensors",
         "tags": [
-          "Stations"
+          "Collects"
         ],
         "responses": {
           "200": {
@@ -310,6 +265,65 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "message": "coleta cadastrada com sucesso"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dashboard/": {
+      "get": {
+        "summary": "Get Parameters from stations collects",
+        "description": "This route has objective to get data from stations",
+        "tags": [
+          "Dashboard"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DashboardPayload"
+              },
+              "examples": {
+                "allParams": {
+                  "value": {
+                    "station": "C14AB7H4",
+                    "startDate": 1664940803,
+                    "endDate": 1664940803,
+                    "parameter": null
+                  }
+                },
+                "heatParams": {
+                  "value": {
+                    "station": "C14AB7H4",
+                    "startDate": 1664940803,
+                    "endDate": 1664940803,
+                    "parameter": "heat"
+                  }
+                },
+                "windParams": {
+                  "value": {
+                    "station": "C14AB7H4",
+                    "startDate": 1664940803,
+                    "endDate": 1664940803,
+                    "parameter": "wind"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
                     "$ref": "#/components/schemas/Dashboard"
                   }
                 }
@@ -317,13 +331,13 @@
             }
           },
           "404": {
-            "description": "OK",
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "error": "Usuário não encontrado"
+                    "error": "Dados não encontrados com este filtro"
                   }
                 }
               }
@@ -386,6 +400,70 @@
           },
           "isActive": {
             "type": "boolean"
+          }
+        }
+      },
+      "Dashboard": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "moment": {
+            "type": "string"
+          },
+          "pluvValue": {
+            "type": "number"
+          },
+          "pluvUnit": {
+            "type": "string"
+          },
+          "heatValue": {
+            "type": "number"
+          },
+          "heatUnit": {
+            "type": "string"
+          },
+          "atmPresValue": {
+            "type": "number"
+          },
+          "atmPresUnit": {
+            "type": "string"
+          },
+          "humidityValue": {
+            "type": "number"
+          },
+          "humidityUnit": {
+            "type": "string"
+          },
+          "windDirectionValue": {
+            "type": "number"
+          },
+          "windDirectionUnit": {
+            "type": "string"
+          },
+          "windVelocityValue": {
+            "type": "number"
+          },
+          "windVelocityUnit": {
+            "type": "string"
+          }
+        }
+      },
+      "DashboardPayload": {
+        "type": "object",
+        "properties": {
+          "station": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "number"
+          },
+          "endDate": {
+            "type": "number"
+          },
+          "parameter": {
+            "type": "string"
           }
         }
       }
