@@ -28,8 +28,8 @@ export class CreateUsersTable1621197196787 implements MigrationInterface {
           name: "role",
           type: "enum",
           enumName: 'roleEnum',
-          enum: [UserRole.ADMIN, UserRole.COMMON],
-          default: `'${UserRole.COMMON}'`
+          enum: [UserRole.ADMIN, UserRole.SIMPLE, UserRole.ADVANCED],
+          default: `'${UserRole.SIMPLE}'`
         },
       ],
     }));

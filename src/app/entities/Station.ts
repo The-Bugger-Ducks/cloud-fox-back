@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { Collect } from './Collect';
+import { Solicitation } from './Solicitation';
 
 
 @Entity('stations')
@@ -22,6 +23,7 @@ export class Station {
 
   @OneToMany(() => Collect, (collect) => collect.station)
   collects: Collect[];
+
 
   constructor() {
     if (!this.id) {

@@ -7,7 +7,6 @@ import { createStation, deleteStation, findStation } from '../services/users/sta
 
 class StationController{
     async index(req: Request, res: Response) {
-        const StationRepository = AppDataSource.getRepository(Station);
         const usersFound = await StationRepository.find({
             relations:{
                 collects: true

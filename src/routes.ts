@@ -6,6 +6,7 @@ import AuthController from './app/controllers/AuthController';
 import UserController from './app/controllers/UserController';
 import StationController  from './app/controllers/StationController';
 import CollectController from './app/controllers/CollectController';
+import SolicitationController from './app/controllers/SolicitationController';
 
 
 
@@ -17,6 +18,10 @@ router.get('/users/:id', UserController.show);
 router.post('/users', UserController.store);
 router.delete('/users', UserController.delete);
 
+router.get('/solicitations', SolicitationController.index);
+router.post('/users/solicitation', SolicitationController.solicitationtCreate);
+router.delete('/users/solicitation', SolicitationController.solicitationtDelete);
+
 router.get('/stations', StationController.index);
 router.get('/stations/:id', StationController.show);
 router.post('/stations', StationController.stationCreate);
@@ -26,6 +31,8 @@ router.get('/collects', CollectController.index);
 router.get('/collects/:id', CollectController.show);
 router.post('/collects', CollectController.collectCreate);
 router.delete('/collects',CollectController.collectDelete);
+
+
 
 
 
