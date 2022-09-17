@@ -1,5 +1,6 @@
 import { Entity, Column, OneToMany, PrimaryColumn } from 'typeorm';
 import { Collect } from './Collect';
+import { Solicitation } from './Solicitation';
 
 
 @Entity('stations')

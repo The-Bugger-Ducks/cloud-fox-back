@@ -8,7 +8,11 @@ import { createUser, findUser, deleteUser } from '../services/userServices';
 class UserController {
   async index(req: Request, res: Response) {
     const userRepository = AppDataSource.getRepository(User);
-    const usersFound = await userRepository.find();
+    const usersFound = await userRepository.find({
+      relations:{
+        solicitations:true
+      }
+    });
 
     return res.json(usersFound);
   }
