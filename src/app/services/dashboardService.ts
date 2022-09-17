@@ -11,9 +11,7 @@ export async function getHeatParams(req: Request, res: Response) {
       'heatValue',
       'heatUnit'
     ],
-    relations: {
-      station: true
-    },
+
     where: {
       station: {
         id: String(stationId)
@@ -34,9 +32,7 @@ export async function getPluvParams(req: Request, res: Response) {
       'pluvValue',
       'pluvUnit'
     ],
-    relations: {
-      station: true
-    },
+
     where: {
       station: {
         id: String(stationId)
@@ -57,9 +53,7 @@ export async function getHumidityParams(req: Request, res: Response) {
       'humidityValue',
       'humidityUnit',
     ],
-    relations: {
-      station: true
-    },
+
     where: {
       station: {
         id: String(stationId)
@@ -80,9 +74,7 @@ export async function getAtmPressureParams(req: Request, res: Response) {
       'atmPresValue',
       'atmPresUnit',
     ],
-    relations: {
-      station: true
-    },
+
     where: {
       station: {
         id: String(stationId)
@@ -105,9 +97,7 @@ export async function getWindParams(req: Request, res: Response) {
       'WindDirectionValue',
       'WindDirectionUnit'
     ],
-    relations: {
-      station: true
-    },
+
     where: {
       station: {
         id: String(stationId)
@@ -123,9 +113,7 @@ export async function getAllParamsWithDate(req: Request, res: Response) {
   const { stationId, startDate, endDate } = req.query;
 
   const allParamsfiltered = await CollectRepository.find({
-    relations: {
-      station: true
-    },
+
     where: {
       station: {
         id: String(stationId)
@@ -141,9 +129,7 @@ export async function getAllParams(req: Request, res: Response) {
   const { stationId } = req.query;
 
   const allParams = await CollectRepository.find({
-    relations: {
-      station: true
-    },
+
     where: {
       station: {
         id: String(stationId)

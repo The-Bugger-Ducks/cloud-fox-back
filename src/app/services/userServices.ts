@@ -30,13 +30,14 @@ export async function findUser(req: Request, res: Response) {
 
 export async function createUser(req: Request, res: Response) {
   const userRepository = AppDataSource.getRepository(User);
-  const { username, email, role } = req.body
+  const { username, email, role, imgSrc } = req.body
 
   const userExists = await userRepository.findOne({ where: { email } })
 
   if (!userExists) {
     const user = userRepository.create({
       username,
+      imgSrc,
       email,
       role,
     });
