@@ -1,4 +1,8 @@
+import 'dotenv/config'
+
 import { DataSource } from 'typeorm';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export const AppDataSource = new DataSource({
   "type": "postgres",
@@ -16,13 +20,5 @@ export const AppDataSource = new DataSource({
   synchronize: false,
   logging: false,
   subscribers: [],
+  ssl: process.env.DB_SSL === 'true'
 });
-
-AppDataSource
-  .initialize()
-  .then(() => {
-    console.log("Data Source has been initialized!")
-  })
-  .catch((err) => {
-    console.error("Error during Data Source initialization:", err)
-  })
