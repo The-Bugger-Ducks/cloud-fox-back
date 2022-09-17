@@ -1,11 +1,18 @@
 import { Request, Response } from "express";
+import { StationRepository } from "../../repositories/StationRepository";
 import { getAllParams, getAtmPressureParams, getHeatParams, getHumidityParams, getPluvParams, getWindParams } from "../services/dashboardService";
 
 class DashboardController {
 	async getSingleOrAllParameters(req: Request, res: Response) {
-		const { parameter } = req.query;
+		const { stationId, parameter } = req.query;
 
-		console.log(parameter)
+		const stationsFound = await StationRepository.findOne({
+			where: {
+				id: String(stationId)
+			}
+		})
+
+		console.log(stationId, stationsFound)
 
 		try {
 			let collects;
@@ -27,7 +34,10 @@ class DashboardController {
 			if (!collects || collects.length < 1) {
 				return res.status(404).json("Não foi encontrado dados com esse filtro.");
 			}
-			return res.status(200).json(collects);
+			return res.status(200).json({
+				"station": stationsFound,
+				"collects": collects
+			});
 
 		} catch (err) {
 			console.log(err)
