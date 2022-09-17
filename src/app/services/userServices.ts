@@ -17,6 +17,7 @@ export async function findUser(req: Request, res: Response) {
       "message": userFound,
       "status": 200
     };
+
   } catch (err) {
     return {
       "message": {
@@ -25,8 +26,6 @@ export async function findUser(req: Request, res: Response) {
       "status": 404
     }
   }
-
-
 }
 
 export async function createUser(req: Request, res: Response) {
@@ -50,10 +49,8 @@ export async function createUser(req: Request, res: Response) {
     };
   } else {
     return {
-      "message": {
-        "error": "Este e-mail já foi usado!",
-      },
-      "status": 409
+      "message": userExists,
+      "status": 200
     };
   }
 }
@@ -70,9 +67,7 @@ export async function deleteUser(req: Request, res: Response) {
 
   if (!userFound) {
     return {
-      "message": {
-        "error": "Usuário não encontrado",
-      },
+      "message": "Usuário não encontrado",
       "status": 404
     }
   }
