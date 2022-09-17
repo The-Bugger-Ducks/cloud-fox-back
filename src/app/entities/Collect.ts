@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import { Station } from './Station';
 
@@ -41,6 +41,7 @@ export class Collect {
   WindVelocityUnit: string;
 
   @ManyToOne(() => Station, (station) => station.collects)
+  @JoinColumn()
   station: Station;
 
   constructor() {
