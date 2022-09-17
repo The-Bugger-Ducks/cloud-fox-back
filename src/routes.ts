@@ -6,6 +6,7 @@ import { Request, Response, Router } from 'express';
 import UserController from './app/controllers/UserController';
 import StationController from './app/controllers/StationController';
 import CollectController from './app/controllers/CollectController';
+import SolicitationController from './app/controllers/SolicitationController';
 import DashboardController from './app/controllers/DashboardController';
 
 class Welcome {
@@ -22,6 +23,10 @@ router.get('/users', UserController.index);
 router.get('/users/:id', UserController.show);
 router.post('/users', UserController.store);
 router.delete('/users/:id', UserController.delete);
+
+router.get('/solicitations', SolicitationController.index);
+router.post('/users/solicitation', SolicitationController.solicitationtCreate);
+router.delete('/solicitation', SolicitationController.solicitationtDelete);
 
 router.get('/stations', StationController.index);
 // router.get('/stations/:id', StationController.show);
