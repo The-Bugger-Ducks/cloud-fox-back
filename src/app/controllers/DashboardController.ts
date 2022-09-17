@@ -5,6 +5,8 @@ class DashboardController {
 	async getSingleOrAllParameters(req: Request, res: Response) {
 		const { parameter } = req.query;
 
+		console.log(parameter)
+
 		try {
 			let collects;
 
@@ -18,7 +20,7 @@ class DashboardController {
 				collects = await getWindParams(req, res);
 			} else if (parameter === 'atmPres') {
 				collects = await getAtmPressureParams(req, res);
-			} else if (parameter === null || parameter === 'null' || undefined) {
+			} else if ((parameter === null || parameter === 'null' || parameter == undefined)) {
 				collects = await getAllParams(req, res);
 			}
 
