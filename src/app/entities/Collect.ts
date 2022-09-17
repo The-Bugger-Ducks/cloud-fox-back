@@ -40,6 +40,10 @@ export class Collect {
   @Column()
   WindVelocityUnit: string;
 
+  // @ManyToOne(() => Station, (station) => station.collects)
+  @JoinColumn()
+  stationId: string
+
   @ManyToOne(() => Station, (station) => station.collects)
   @JoinColumn()
   station: Station;
