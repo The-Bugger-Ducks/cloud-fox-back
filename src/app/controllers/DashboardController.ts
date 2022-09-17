@@ -1,12 +1,9 @@
 import { Request, Response } from "express";
-import { Between } from "typeorm";
-import { CollectRepository } from "../../repositories/CollectRepository";
-import { StationRepository } from "../../repositories/StationRepository";
 import { getAllParams, getAtmPressureParams, getHeatParams, getHumidityParams, getPluvParams, getWindParams } from "../services/dashboardService";
 
 class DashboardController {
 	async getSingleOrAllParameters(req: Request, res: Response) {
-		const { parameter } = req.body;
+		const { parameter } = req.query;
 
 		try {
 			let collects;
@@ -21,7 +18,7 @@ class DashboardController {
 				collects = await getWindParams(req, res);
 			} else if (parameter === 'atmPres') {
 				collects = await getAtmPressureParams(req, res);
-			} else if (parameter === null) {
+			} else if (parameter === null || parameter === 'null' || undefined) {
 				collects = await getAllParams(req, res);
 			}
 
