@@ -54,7 +54,7 @@ export async function findStation(req: Request, res: Response) {
 
 export async function activateStation(req: Request, res: Response) {
   const { id } = req.params;
-  const { lat, lon, description } = req.body
+  const { name, lat, lon, description } = req.body
 
   const StationExist = await StationRepository.findOne({ where: { id } })
 
@@ -67,6 +67,7 @@ export async function activateStation(req: Request, res: Response) {
 
   try {
     await StationRepository.update({ id }, {
+      name,
       lat,
       lon,
       description,
