@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "User authentication microservice",
-    "description": "This api has objective get data from meteorologic station",
+    "title": "Cloud Fox API",
+    "description": "This api has objective register and get data from meteorological stations",
     "contact": {
       "email": "bugger-ducker-lab@gmail.com"
     },
