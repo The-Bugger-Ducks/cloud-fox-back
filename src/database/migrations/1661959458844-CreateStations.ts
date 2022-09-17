@@ -13,6 +13,11 @@ export class CreateStations1661959458844 implements MigrationInterface {
           isNullable: false
         },
         {
+          name: 'name',
+          type: 'varchar',
+          isNullable: true
+        },
+        {
           name: "lat",
           type: "float",
           isNullable: true
