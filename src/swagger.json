@@ -309,41 +309,26 @@
         "tags": [
           "Dashboard"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DashboardPayload"
-              },
-              "examples": {
-                "allParams": {
-                  "value": {
-                    "station": "C14AB7H4",
-                    "startDate": 1664940803,
-                    "endDate": 1664940803,
-                    "parameter": null
-                  }
-                },
-                "heatParams": {
-                  "value": {
-                    "station": "C14AB7H4",
-                    "startDate": 1664940803,
-                    "endDate": 1664940803,
-                    "parameter": "heat"
-                  }
-                },
-                "windParams": {
-                  "value": {
-                    "station": "C14AB7H4",
-                    "startDate": 1664940803,
-                    "endDate": 1664940803,
-                    "parameter": "wind"
-                  }
-                }
-              }
+        "parameters": [
+          {
+            "name": "stationId",
+            "in": "query",
+            "description": "Station Id for search",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "parameter",
+            "in": "query",
+            "description": "Parameter filter for query",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -541,6 +526,9 @@
           "username": {
             "type": "string"
           },
+          "imgSrc": {
+            "type": "string"
+          },
           "email": {
             "type": "string"
           },
@@ -553,6 +541,9 @@
         "type": "object",
         "properties": {
           "username": {
+            "type": "string"
+          },
+          "imgSrc": {
             "type": "string"
           },
           "email": {
@@ -589,61 +580,66 @@
       "Dashboard": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
+          "schema": {
+            "type": "object",
+            "properties": {
+              "$ref": "#/components/schemas/Station"
+            }
           },
-          "moment": {
-            "type": "string"
-          },
-          "pluvValue": {
-            "type": "number"
-          },
-          "pluvUnit": {
-            "type": "string"
-          },
-          "heatValue": {
-            "type": "number"
-          },
-          "heatUnit": {
-            "type": "string"
-          },
-          "atmPresValue": {
-            "type": "number"
-          },
-          "atmPresUnit": {
-            "type": "string"
-          },
-          "humidityValue": {
-            "type": "number"
-          },
-          "humidityUnit": {
-            "type": "string"
-          },
-          "windDirectionValue": {
-            "type": "number"
-          },
-          "windDirectionUnit": {
-            "type": "string"
-          },
-          "windVelocityValue": {
-            "type": "number"
-          },
-          "windVelocityUnit": {
-            "type": "string"
+          "collects": {
+            "type": "array",
+            "items": {
+              "id": {
+                "type": "string"
+              },
+              "moment": {
+                "type": "string"
+              },
+              "pluvValue": {
+                "type": "number"
+              },
+              "pluvUnit": {
+                "type": "string"
+              },
+              "heatValue": {
+                "type": "number"
+              },
+              "heatUnit": {
+                "type": "string"
+              },
+              "atmPresValue": {
+                "type": "number"
+              },
+              "atmPresUnit": {
+                "type": "string"
+              },
+              "humidityValue": {
+                "type": "number"
+              },
+              "humidityUnit": {
+                "type": "string"
+              },
+              "windDirectionValue": {
+                "type": "number"
+              },
+              "windDirectionUnit": {
+                "type": "string"
+              },
+              "windVelocityValue": {
+                "type": "number"
+              },
+              "windVelocityUnit": {
+                "type": "string"
+              }
+            }
           }
         }
       },
-      "DashboardPayload": {
+      "DashboardQueryParams": {
         "type": "object",
         "properties": {
           "station": {
             "type": "string"
-          },
-          "startDate": {
-            "type": "number"
-          },
-          "endDate": {
-            "type": "number"
           },
           "parameter": {
             "type": "string"
