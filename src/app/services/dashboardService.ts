@@ -18,6 +18,9 @@ export async function getHeatParams(req: Request, res: Response) {
       },
       // moment: Between(parseInt(String(startDate)), parseInt(String(endDate)))
     },
+    order: {
+      moment: 'ASC'
+    }
   })
 
   return heatParams;
@@ -32,13 +35,15 @@ export async function getPluvParams(req: Request, res: Response) {
       'pluvValue',
       'pluvUnit'
     ],
-
     where: {
       station: {
         id: String(stationId)
       },
       // moment: Between(parseInt(String(startDate)), parseInt(String(endDate)))
     },
+    order: {
+      moment: 'ASC'
+    }
   })
 
   return pluvParams;
@@ -60,6 +65,9 @@ export async function getHumidityParams(req: Request, res: Response) {
       },
       // moment: Between(parseInt(String(startDate)), parseInt(String(endDate)))
     },
+    order: {
+      moment: 'ASC'
+    }
   })
 
   return humidityParams;
@@ -81,6 +89,9 @@ export async function getAtmPressureParams(req: Request, res: Response) {
       },
       // moment: Between(parseInt(String(startDate)), parseInt(String(endDate)))
     },
+    order: {
+      moment: 'ASC'
+    }
   })
 
   return atmPressureParams;
@@ -104,6 +115,9 @@ export async function getWindParams(req: Request, res: Response) {
       },
       // moment: Between(parseInt(String(startDate)), parseInt(String(endDate)))
     },
+    order: {
+      moment: 'ASC'
+    }
   })
 
   return windParams;
@@ -118,8 +132,12 @@ export async function getAllParamsWithDate(req: Request, res: Response) {
       station: {
         id: String(stationId)
       },
+
       // moment: Between(parseInt(String(startDate)), parseInt(String(endDate)))
     },
+    order: {
+      moment: 'ASC'
+    }
   })
 
   return allParamsfiltered;
@@ -135,6 +153,9 @@ export async function getAllParams(req: Request, res: Response) {
         id: String(stationId)
       },
     },
+    order: {
+      moment: 'ASC'
+    }
   })
 
   return allParams;
