@@ -3,8 +3,6 @@ import { SolicitationRepository } from '../../repositories/SolicitationRepositor
 import { UserRepository } from '../../repositories/UserRepository';
 
 
-
-
 export async function createSolicitation(req: Request, res: Response) {
     const {roleReq, user} = req.body 
 
@@ -13,19 +11,15 @@ export async function createSolicitation(req: Request, res: Response) {
             solicitations:true
         },
         where:{id:user}
-        })
-
+    })
     
-
     if (!hasUser) {
         return{
             "message": "Esse usuário não foi encontrado",
             "status": 404
         }       
     }
-
-
-    
+  
     if (hasUser.solicitations || hasUser.solicitations != null) {
         return{
             "message": "Essa solicitação já existe",
@@ -40,7 +34,6 @@ export async function createSolicitation(req: Request, res: Response) {
         }
     }
 
-
     const newSolicitation = SolicitationRepository.create({
        roleReq, user
     })
@@ -49,10 +42,7 @@ export async function createSolicitation(req: Request, res: Response) {
         "message": "Solicitação criada",
         "status": 201
     }    
-
 }
-
-
 
 export async function deleteSolicitation(req: Request, res: Response) {
     const {id, role, user} = req.body
@@ -65,7 +55,6 @@ export async function deleteSolicitation(req: Request, res: Response) {
 
     })
 
-
     if(!hasSolicitation){
         return {
             "message": "Solicitação não existe",
@@ -73,22 +62,20 @@ export async function deleteSolicitation(req: Request, res: Response) {
         }
     }
 
-    if(hasSolicitation.roleReq != role){
-        return{
-            "message": "A permissão esta incondizente com a solicitação",
-            "status": 400
-        }
-
-    }
-    const hasUser = await UserRepository.findOneBy({id:user})
-
-
-
-    if (!hasUser) {
+    if (role == null) {
         await SolicitationRepository.delete({id})
         return {
             "message": "Solicitação foi deletada",
             "status": 200
+        }
+    }
+
+    const hasUser = await UserRepository.findOneBy({id:user})
+
+    if(hasSolicitation.roleReq != role){
+        return{
+            "message": "A permissão esta incondizente com a solicitação",
+            "status": 400
         }
     }else{
 
@@ -99,7 +86,14 @@ export async function deleteSolicitation(req: Request, res: Response) {
             "message": "Permissão alterada",
             "status": 200
         } 
-
     }
+
+
+
+
+
+
+
+    
 
 }
