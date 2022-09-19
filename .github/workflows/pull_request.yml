@@ -1,7 +1,7 @@
 name: development
-on: [push]
+on: [pull_request]
 jobs:
-  docker:
+  build-docker-test:
     env:
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
