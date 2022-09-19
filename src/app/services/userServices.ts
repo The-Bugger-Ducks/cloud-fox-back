@@ -17,6 +17,7 @@ export async function findUser(req: Request, res: Response) {
       "message": userFound,
       "status": 200
     };
+
   } catch (err) {
     return {
       "message": {
@@ -25,19 +26,18 @@ export async function findUser(req: Request, res: Response) {
       "status": 404
     }
   }
-
-
 }
 
 export async function createUser(req: Request, res: Response) {
   const userRepository = AppDataSource.getRepository(User);
-  const { username, email, role } = req.body
+  const { username, email, role, imgSrc } = req.body
 
   const userExists = await userRepository.findOne({ where: { email } })
 
   if (!userExists) {
     const user = userRepository.create({
       username,
+      imgSrc,
       email,
       role,
     });
@@ -50,10 +50,8 @@ export async function createUser(req: Request, res: Response) {
     };
   } else {
     return {
-      "message": {
-        "error": "Este e-mail já foi usado!",
-      },
-      "status": 409
+      "message": userExists,
+      "status": 200
     };
   }
 }
@@ -70,9 +68,7 @@ export async function deleteUser(req: Request, res: Response) {
 
   if (!userFound) {
     return {
-      "message": {
-        "error": "Usuário não encontrado",
-      },
+      "message": "Usuário não encontrado",
       "status": 404
     }
   }

@@ -23,7 +23,7 @@ export async function createCollect(req: Request, res: Response) {
 
   } else {
     return {
-      "message": "Coletor já existe",
+      "message": "Coleta já existe",
       "status": 409
     }
   }

@@ -3,16 +3,23 @@ import { Between } from "typeorm";
 import { CollectRepository } from "../../repositories/CollectRepository";
 
 export async function getHeatParams(req: Request, res: Response) {
-  const { stationId, startDate, endDate } = req.body;
+  const { stationId, startDate, endDate } = req.query;
+
   const heatParams = await CollectRepository.find({
     select: [
       'moment',
       'heatValue',
       'heatUnit'
     ],
+
     where: {
-      station: stationId,
-      moment: Between(startDate, endDate)
+      station: {
+        id: String(stationId)
+      },
+      // moment: Between(parseInt(String(startDate)), parseInt(String(endDate)))
+    },
+    order: {
+      moment: 'ASC'
     }
   })
 
@@ -20,7 +27,8 @@ export async function getHeatParams(req: Request, res: Response) {
 }
 
 export async function getPluvParams(req: Request, res: Response) {
-  const { stationId, startDate, endDate } = req.body;
+  const { stationId, startDate, endDate } = req.query;
+
   const pluvParams = await CollectRepository.find({
     select: [
       'moment',
@@ -28,8 +36,13 @@ export async function getPluvParams(req: Request, res: Response) {
       'pluvUnit'
     ],
     where: {
-      station: stationId,
-      moment: Between(startDate, endDate)
+      station: {
+        id: String(stationId)
+      },
+      // moment: Between(parseInt(String(startDate)), parseInt(String(endDate)))
+    },
+    order: {
+      moment: 'ASC'
     }
   })
 
@@ -37,16 +50,23 @@ export async function getPluvParams(req: Request, res: Response) {
 }
 
 export async function getHumidityParams(req: Request, res: Response) {
-  const { stationId, startDate, endDate } = req.body;
+  const { stationId, startDate, endDate } = req.query;
+
   const humidityParams = await CollectRepository.find({
     select: [
       'moment',
       'humidityValue',
       'humidityUnit',
     ],
+
     where: {
-      station: stationId,
-      moment: Between(startDate, endDate)
+      station: {
+        id: String(stationId)
+      },
+      // moment: Between(parseInt(String(startDate)), parseInt(String(endDate)))
+    },
+    order: {
+      moment: 'ASC'
     }
   })
 
@@ -54,16 +74,23 @@ export async function getHumidityParams(req: Request, res: Response) {
 }
 
 export async function getAtmPressureParams(req: Request, res: Response) {
-  const { stationId, startDate, endDate } = req.body;
+  const { stationId, startDate, endDate } = req.query;
+
   const atmPressureParams = await CollectRepository.find({
     select: [
       'moment',
       'atmPresValue',
       'atmPresUnit',
     ],
+
     where: {
-      station: stationId,
-      moment: Between(startDate, endDate)
+      station: {
+        id: String(stationId)
+      },
+      // moment: Between(parseInt(String(startDate)), parseInt(String(endDate)))
+    },
+    order: {
+      moment: 'ASC'
     }
   })
 
@@ -71,7 +98,8 @@ export async function getAtmPressureParams(req: Request, res: Response) {
 }
 
 export async function getWindParams(req: Request, res: Response) {
-  const { stationId, startDate, endDate } = req.body;
+  const { stationId, startDate, endDate } = req.query;
+
   const windParams = await CollectRepository.find({
     select: [
       'moment',
@@ -80,23 +108,55 @@ export async function getWindParams(req: Request, res: Response) {
       'WindDirectionValue',
       'WindDirectionUnit'
     ],
+
     where: {
-      station: stationId,
-      moment: Between(startDate, endDate)
+      station: {
+        id: String(stationId)
+      },
+      // moment: Between(parseInt(String(startDate)), parseInt(String(endDate)))
+    },
+    order: {
+      moment: 'ASC'
     }
   })
 
   return windParams;
 }
 
-export async function getAllParams(req: Request, res: Response) {
-  const { stationId, startDate, endDate } = req.body;
-  const windParams = await CollectRepository.find({
+export async function getAllParamsWithDate(req: Request, res: Response) {
+  const { stationId, startDate, endDate } = req.query;
+
+  const allParamsfiltered = await CollectRepository.find({
+
     where: {
-      station: stationId,
-      moment: Between(startDate, endDate)
+      station: {
+        id: String(stationId)
+      },
+
+      // moment: Between(parseInt(String(startDate)), parseInt(String(endDate)))
+    },
+    order: {
+      moment: 'ASC'
     }
   })
 
-  return windParams;
+  return allParamsfiltered;
+}
+
+export async function getAllParams(req: Request, res: Response) {
+  const { stationId } = req.query;
+
+  const allParams = await CollectRepository.find({
+
+    where: {
+      station: {
+        id: String(stationId)
+      },
+    },
+    order: {
+      moment: 'ASC'
+    }
+  })
+
+  return allParams;
 }

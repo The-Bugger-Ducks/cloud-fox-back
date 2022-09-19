@@ -12,6 +12,9 @@ export class Station {
   id: string;
 
   @Column()
+  name: string;
+
+  @Column()
   lat: number;
 
   @Column()

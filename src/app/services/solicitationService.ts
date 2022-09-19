@@ -4,7 +4,7 @@ import { UserRepository } from '../../repositories/UserRepository';
 
 
 export async function createSolicitation(req: Request, res: Response) {
-    const {roleReq, user} = req.body 
+  const { roleReq, user } = req.body
 
     const hasUser = await UserRepository.findOne({ 
         relations:{
@@ -45,15 +45,15 @@ export async function createSolicitation(req: Request, res: Response) {
 }
 
 export async function deleteSolicitation(req: Request, res: Response) {
-    const {id, role, user} = req.body
+  const { id, role, user } = req.body
 
-    const hasSolicitation = await SolicitationRepository.findOne({
-        relations:{
-            user:true,
-        },
-        where:{id}
+  const hasSolicitation = await SolicitationRepository.findOne({
+    relations: {
+      user: true,
+    },
+    where: { id }
 
-    })
+  })
 
     if(!hasSolicitation){
         return {
