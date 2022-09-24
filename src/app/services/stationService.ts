@@ -1,18 +1,24 @@
 import { Request, Response } from 'express';
+import { SensorRepository } from '../../repositories/SensorRepository';
+import { ICreateSensor } from '../interfaces/ICreateSensor';
+import { ICreateStationWithSensors } from '../interfaces/ICreateStationWithSensors';
 import { StationRepository } from "./../../repositories/StationRepository"
 
 
 export async function createStation(req: Request, res: Response) {
-  const { id } = req.body;
+  const { name, lat, lon, description, startdate } = req.body;
 
-  const hasStation = await StationRepository.findOne({ where: { id } })
-
+  const hasStation = await StationRepository.findOne({ where: { lat, lon } })
   if (!hasStation) {
     const newStation = StationRepository.create({
-      id,
-    })
-
-    await StationRepository.save(newStation)
+      name,
+      lat,
+      lon,
+      description,
+      startdate,
+      isActive: false
+    });
+    await StationRepository.save(newStation);
 
     return {
       "message": "Estação cadastrada com sucesso",
@@ -27,12 +33,49 @@ export async function createStation(req: Request, res: Response) {
   }
 }
 
+export async function createStationWithSensors(req: Request, res: Response) {
+  const { name, lat, lon, description, sensors }: ICreateStationWithSensors = req.body;
+
+  const hasStation = await StationRepository.find({ where: { lat, lon } })
+
+  if (hasStation.length < 1) {
+    const newStation = StationRepository.create({ name, lat, lon, description });
+    const stationSaved = await StationRepository.save(newStation);
+
+
+    sensors.map(async sensor => {
+      const sensorCreated = SensorRepository.create({
+        model: sensor.model,
+        factor: sensor.factor,
+        maxRange: sensor.maxRange,
+        minRange: sensor.minRange,
+        unit: sensor.unit,
+        startDate: Date.now().valueOf(),
+        endDate: null,
+        stationId: stationSaved.id,
+      });
+      console.log(stationSaved.id)
+      const sensorSaved = await SensorRepository.save(sensorCreated);
+
+      console.log("===================================", sensorSaved)
+    });
+
+    return { "message": "Estação cadastrada com sucesso", "status": 201 };
+
+  } else {
+    return { "message": "Esta estação já existe", "status": 409 };
+  };
+}
+
 
 export async function findStation(req: Request, res: Response) {
   const { id } = req.params;
 
   try {
     const stationFound = await StationRepository.findOne({
+      relations: {
+        sensors: true
+      },
       where: {
         id,
       },
@@ -54,10 +97,8 @@ export async function findStation(req: Request, res: Response) {
 
 export async function activateStation(req: Request, res: Response) {
   const { id } = req.params;
-  const { name, lat, lon, description } = req.body
 
   const StationExist = await StationRepository.findOne({ where: { id } })
-
   if (!StationExist) {
     return {
       "message": "Estação não existe",
@@ -66,14 +107,10 @@ export async function activateStation(req: Request, res: Response) {
   }
 
   try {
-    await StationRepository.update({ id }, {
-      name,
-      lat,
-      lon,
-      description,
-      startdate: Date.now().valueOf(),
-      isActive: true
-    });
+    // await StationRepository.update({ id }, {
+    //   startdate: Date.now().valueOf(),
+    //   isActive: true
+    // });
 
     return {
       "message": "Estação foi Ativada",

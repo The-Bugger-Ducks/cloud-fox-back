@@ -39,7 +39,7 @@ router.delete('/stations/:id', StationController.stationDelete);
 router.post('/collects', CollectController.collectCreate);
 // router.delete('/collects/:id', CollectController.collectDelete);
 
-router.get('/dashboard', DashboardController.getSingleOrAllParameters);
+// router.get('/dashboard', DashboardController.getSingleOrAllParameters);
 
 // router.post('/auth', AuthController.authenticate);
 

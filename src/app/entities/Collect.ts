@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
+import { Sensor } from './Sensor';
 import { Station } from './Station';
 
 @Entity('collects')
@@ -11,42 +12,14 @@ export class Collect {
   moment: number;
 
   @Column()
-  pluvValue: number;
-  @Column()
-  pluvUnit: string;
+  value: number;
 
-  @Column()
-  heatValue: number;
-  @Column()
-  heatUnit: string;
-
-  @Column()
-  atmPresValue: number;
-  @Column()
-  atmPresUnit: string;
-
-  @Column()
-  humidityValue: number;
-  @Column()
-  humidityUnit: string;
-
-  @Column()
-  WindDirectionValue: number;
-  @Column()
-  WindDirectionUnit: string;
-
-  @Column()
-  WindVelocityValue: number;
-  @Column()
-  WindVelocityUnit: string;
-
-  // @ManyToOne(() => Station, (station) => station.collects)
   @JoinColumn()
-  stationId: string
+  sensorId: string
 
-  @ManyToOne(() => Station, (station) => station.collects)
+  @ManyToOne(() => Sensor, (sensor) => sensor.collects)
   @JoinColumn()
-  station: Station;
+  sensor: Sensor;
 
   constructor() {
     if (!this.id) {

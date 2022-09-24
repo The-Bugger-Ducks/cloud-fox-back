@@ -20,76 +20,22 @@ export class CreateCollects1661959473187 implements MigrationInterface {
           isUnique: true
         },
         {
-          name: "pluvValue",
-          type: "float"
-        },
-
-        {
-          name: "pluvUnit",
-          type: "varchar"
-        },
-
-        {
-          name: "heatValue",
-          type: "float"
-        },
-
-        {
-          name: "heatUnit",
-          type: "varchar"
-        },
-
-        {
-          name: "atmPresValue",
-          type: "float"
-        },
-
-        {
-          name: "atmPresUnit",
-          type: "varchar"
-        },
-        {
-          name: "humidityValue",
+          name: "value",
           type: "float"
         },
         {
-          name: "humidityUnit",
-          type: "varchar"
-        },
-        {
-          name: "WindDirectionValue",
-          type: "float"
-        },
-        {
-          name: "WindDirectionUnit",
-          type: "varchar"
-        },
-        {
-          name: "WindVelocityValue",
-          type: "float"
-        },
-        {
-          name: "WindVelocityUnit",
-          type: "varchar"
+          name: "sensorId",
+          type: "uuid"
         }
       ]
     }));
 
-
-    await queryRunner.addColumn(
-      "collects",
-      new TableColumn({
-        name: "stationId",
-        type: "varchar",
-      }),
-    )
-
     await queryRunner.createForeignKey(
       "collects",
       new TableForeignKey({
-        columnNames: ["stationId"],
+        columnNames: ["sensorId"],
         referencedColumnNames: ["id"],
-        referencedTableName: "stations",
+        referencedTableName: "sensors",
         onDelete: "CASCADE",
       }),
     )

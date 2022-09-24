@@ -1,14 +1,12 @@
-import { Entity, Column, OneToMany, PrimaryColumn } from 'typeorm';
-import { Collect } from './Collect';
-import { Solicitation } from './Solicitation';
+import { Entity, Column, OneToMany, JoinColumn, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
+import { v4 as uuid } from 'uuid';
+import { Sensor } from './Sensor';
 
 
 @Entity('stations')
 export class Station {
-  @PrimaryColumn({
-    default: false,
-    nullable: false,
-  })
+  [x: string]: any;
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -29,6 +27,13 @@ export class Station {
   @Column()
   isActive: boolean;
 
-  @OneToMany(() => Collect, (collect) => collect.station)
-  collects: Collect[];
+  @OneToMany(() => Sensor, (sensor) => sensor.station)
+  @JoinColumn()
+  sensors: Sensor[];
+
+  constructor() {
+    if (!this.id) {
+      this.id = uuid();
+    }
+  }
 }
