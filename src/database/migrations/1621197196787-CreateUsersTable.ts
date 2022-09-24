@@ -25,6 +25,10 @@ export class CreateUsersTable1621197196787 implements MigrationInterface {
           isUnique: true
         },
         {
+          name: "imgSrc",
+          type: "varchar"
+        },
+        {
           name: "role",
           type: "enum",
           enumName: 'roleEnum',

@@ -30,8 +30,8 @@ router.delete('/solicitation', SolicitationController.solicitationtDelete);
 
 router.get('/stations', StationController.index);
 router.get('/stations/:id', StationController.show);
-// router.post('/stations', StationController.stationCreate);
-router.put('/stations/:id', StationController.stationActivate);
+router.post('/stations', StationController.stationCreate);
+router.put('/stations/activate/:id', StationController.stationActivate);
 router.delete('/stations/:id', StationController.stationDelete);
 
 // router.get('/collects', CollectController.index);
