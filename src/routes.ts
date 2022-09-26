@@ -21,6 +21,7 @@ router.get('/', Welcome.getWelcome);
 
 router.get('/users', UserController.index);
 router.get('/users/:id', UserController.show);
+router.get('/advancedUsers', UserController.findAdvancedUsers);
 router.post('/users', UserController.store);
 router.delete('/users/:id', UserController.delete);
 

@@ -3,7 +3,7 @@ import { AppDataSource } from '../../data-source';
 
 import { User } from '../entities/User';
 
-import { createUser, findUser, deleteUser } from '../services/userServices';
+import { createUser, findUser, deleteUser, findAdvancedUsers } from '../services/userServices';
 
 class UserController {
   async index(req: Request, res: Response) {
@@ -19,6 +19,11 @@ class UserController {
 
   async show(req: Request, res: Response) {
     const findResponse = await findUser(req, res);
+    return res.status(findResponse.status).json(findResponse.message);
+  }
+
+  async findAdvancedUsers(req: Request, res: Response) {
+    const findResponse = await findAdvancedUsers(req, res);
     return res.status(findResponse.status).json(findResponse.message);
   }
 

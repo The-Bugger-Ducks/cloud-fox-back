@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from "../../data-source";
 import { User } from "../entities/User";
+import { UserRole } from '../enums/UserRoleEnum';
 
 export async function findUser(req: Request, res: Response) {
   const { id } = req.params;
@@ -15,6 +16,38 @@ export async function findUser(req: Request, res: Response) {
 
     return {
       "message": userFound,
+      "status": 200
+    };
+
+  } catch (err) {
+    return {
+      "message": {
+        "error": "usuário não encontrado"
+      },
+      "status": 404
+    }
+  }
+}
+
+export async function findAdvancedUsers(req: Request, res: Response) {
+  const userRepository = AppDataSource.getRepository(User);
+
+  try {
+    const usersFound = await userRepository.find({
+      where: [{
+        role: UserRole.ADVANCED
+      },
+      {
+        role: UserRole.ADMIN
+      }],
+      order: {
+        role: 'ASC',
+        username: 'ASC'
+      }
+    });
+
+    return {
+      "message": usersFound,
       "status": 200
     };
 
