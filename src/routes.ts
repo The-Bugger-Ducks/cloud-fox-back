@@ -8,6 +8,7 @@ import StationController from './app/controllers/StationController';
 import CollectController from './app/controllers/CollectController';
 import SolicitationController from './app/controllers/SolicitationController';
 import DashboardController from './app/controllers/DashboardController';
+import SensorController from './app/controllers/SensorController';
 
 class Welcome {
   static getWelcome(req: Request, res: Response) {
@@ -19,9 +20,13 @@ const router = Router();
 
 router.get('/', Welcome.getWelcome);
 
+// router.post('/auth', AuthController.authenticate);
+
+// router.get('/dashboard', DashboardController.getSingleOrAllParameters);
+
 router.get('/users', UserController.index);
 router.get('/users/:id', UserController.show);
-router.get('/advancedUsers', UserController.findAdvancedUsers);
+router.get('/users/advanced', UserController.findAdvancedUsers);
 router.post('/users', UserController.store);
 router.delete('/users/:id', UserController.delete);
 
@@ -35,13 +40,16 @@ router.post('/stations', StationController.stationCreate);
 router.put('/stations/activate/:id', StationController.stationActivate);
 router.delete('/stations/:id', StationController.stationDelete);
 
-// router.get('/collects', CollectController.index);
-// router.get('/collects/:id', CollectController.show);
+router.get('/sensors', SensorController.index);
+router.get('/sensors/:id', SensorController.show);
+router.post('/sensors', SensorController.sensorCreate);
+router.delete('/sensors/:id', SensorController.sensorDelete);
+
+router.get('/collects', CollectController.index);
+router.get('/collects/:id', CollectController.show);
 router.post('/collects', CollectController.collectCreate);
-// router.delete('/collects/:id', CollectController.collectDelete);
+router.delete('/collects/:id', CollectController.collectDelete);
 
-// router.get('/dashboard', DashboardController.getSingleOrAllParameters);
 
-// router.post('/auth', AuthController.authenticate);
 
 export default router;

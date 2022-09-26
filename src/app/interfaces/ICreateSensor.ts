@@ -3,8 +3,6 @@ export interface ICreateSensor {
   minRange: number;
   maxRange: number;
   factor: number;
-  startDate: Date;
-  endDate: Date;
   unit: string;
   stationId: string;
 };
