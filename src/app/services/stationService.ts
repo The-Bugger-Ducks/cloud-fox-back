@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { SensorRepository } from '../../repositories/SensorRepository';
+import { Sensor } from '../entities/Sensor';
 import { Station } from '../entities/Station';
 import { ICreateSensor } from '../interfaces/ICreateSensor';
 import { ICreateStationWithSensors } from '../interfaces/ICreateStationWithSensors';
@@ -112,6 +113,12 @@ export async function activateStation(req: Request, res: Response) {
       .update(Station)
       .set({ startdate: Date.now().valueOf() as any, isActive: true as any })
       .where("id = :id", { id: id })
+      .execute();
+
+    await SensorRepository.createQueryBuilder()
+      .update(Sensor)
+      .set({ startDate: Date.now().valueOf() })
+      .where("stationId = :id", { id: id })
       .execute();
 
     return {

@@ -14,6 +14,7 @@ export class Collect {
   @Column()
   value: number;
 
+  @Column({ nullable: true })
   @JoinColumn()
   sensorId: string
 

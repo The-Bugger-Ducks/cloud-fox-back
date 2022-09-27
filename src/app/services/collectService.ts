@@ -4,28 +4,14 @@ import { StationRepository } from './../../repositories/StationRepository';
 
 
 export async function createCollect(req: Request, res: Response) {
-  const { moment, station } = req.body
+  const { moment, sensorId, value } = req.body
 
-  if (!await StationRepository.findOne({ where: { id: station } })) {
-    const newStation = StationRepository.create({ id: station });
-    await StationRepository.save(newStation);
-  }
+  const newCollect = CollectRepository.create({ moment, sensorId, value });
+  await CollectRepository.save(newCollect)
 
-  const hasCollect = await CollectRepository.findOne({ where: { moment } })
-  if (!hasCollect) {
-    const newCollect = CollectRepository.create(req.body);
-
-    await CollectRepository.save(newCollect)
-    return {
-      "message": "Coletor cadastrada com sucesso",
-      "status": 201
-    }
-
-  } else {
-    return {
-      "message": "Coleta já existe",
-      "status": 409
-    }
+  return {
+    "message": "Coletor cadastrada com sucesso",
+    "status": 201
   }
 }
 

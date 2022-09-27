@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { IsNull, Not } from 'typeorm';
 import { SensorRepository } from '../../repositories/SensorRepository';
 import { ICreateSensor } from '../interfaces/ICreateSensor';
 import { createSensor, deleteSensor, findSensor } from '../services/sensorService';
@@ -6,7 +7,12 @@ import { createSensor, deleteSensor, findSensor } from '../services/sensorServic
 
 class SensorController {
   async index(req: Request, res: Response) {
-    const sensorsFound = await SensorRepository.find({ relations: { station: true } });
+    const sensorsFound = await SensorRepository.find({
+      relations: { station: true, collects: true },
+      where: {
+        startDate: Not(IsNull())
+      }
+    });
     return res.json(sensorsFound);
   }
 
