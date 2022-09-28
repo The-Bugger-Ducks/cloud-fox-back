@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../../data-source';
 import { Station } from '../entities/Station';
-import { ICreateSensor } from '../interfaces/ICreateSensor';
-import { activateStation, createStation, createStationWithSensors, deleteStation, findStation } from '../services/stationService';
+import { ICreateParameterType } from '../interfaces/ICreateParameterType';
+import { activateStation, createStation, createStationWithParameterTypes, deleteStation, findStation } from '../services/stationService';
 
 
 class StationController {
@@ -12,7 +12,7 @@ class StationController {
     if (req.query.isActive == 'true') {
       const stationsFound = await StationRepository.find({
         relations: {
-          sensors: true
+          parameters: true
         },
         where: {
           isActive: true
@@ -23,7 +23,7 @@ class StationController {
 
     const stationsFound = await StationRepository.find({
       relations: {
-        sensors: true
+        parameters: true
       }
     });
     return res.json(stationsFound);
@@ -35,13 +35,13 @@ class StationController {
   }
 
   async stationCreate(req: Request, res: Response) {
-    const { sensors }: { sensors: Array<ICreateSensor> } = req.body;
+    const { parameterTypes }: { parameterTypes: Array<ICreateParameterType> } = req.body;
     let createResponse;
 
-    if (!sensors || sensors.length < 0) {
+    if (!parameterTypes || parameterTypes.length < 0) {
       createResponse = await createStation(req, res);
     } else {
-      createResponse = await createStationWithSensors(req, res);
+      createResponse = await createStationWithParameterTypes(req, res);
     }
     return res.status(createResponse.status).json(createResponse.message);
   }

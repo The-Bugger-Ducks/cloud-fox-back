@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
-import { SensorRepository } from '../../repositories/SensorRepository';
-import { Sensor } from '../entities/Sensor';
+import { ParameterRepository } from '../../repositories/ParameterRepository';
+import { ParameterTypeRepository } from '../../repositories/ParameterTypeRepository';
+import { Parameter } from '../entities/Parameter';
+import { ParameterType } from '../entities/ParameterType';
 import { Station } from '../entities/Station';
-import { ICreateSensor } from '../interfaces/ICreateSensor';
-import { ICreateStationWithSensors } from '../interfaces/ICreateStationWithSensors';
+import { ICreateParameterType } from '../interfaces/ICreateParameterType';
+import { ICreateStationWithParameterTypes } from '../interfaces/ICreateStationWithParameterTypes';
 import { StationRepository } from "./../../repositories/StationRepository"
 
 
@@ -35,31 +37,40 @@ export async function createStation(req: Request, res: Response) {
   }
 }
 
-export async function createStationWithSensors(req: Request, res: Response) {
-  const { name, lat, lon, description, sensors }: ICreateStationWithSensors = req.body;
+export async function createStationWithParameterTypes(req: Request, res: Response) {
+  const { id, name, lat, lon, description, parameterTypes }: ICreateStationWithParameterTypes = req.body;
 
   const hasStation = await StationRepository.find({ where: { lat, lon } })
 
   if (hasStation.length < 1) {
-    const newStation = StationRepository.create({ name, lat, lon, description });
+    const newStation = StationRepository.create({ id, name, lat, lon, description });
     const stationSaved = await StationRepository.save(newStation);
 
+    parameterTypes.map(async parameterType => {
+      const paramsTypeExists = await ParameterTypeRepository.findOne({ where: { name: parameterType.name } })
+      if (paramsTypeExists) {
+        const paramsCreated = ParameterRepository.create({
+          stationId: stationSaved.id,
+          parameterTypeId: paramsTypeExists.id,
+        });
+        const paramsSaved = await ParameterRepository.save(paramsCreated);
 
-    sensors.map(async sensor => {
-      const sensorCreated = SensorRepository.create({
-        model: sensor.model,
-        factor: sensor.factor,
-        maxRange: sensor.maxRange,
-        minRange: sensor.minRange,
-        unit: sensor.unit,
-        startDate: Date.now().valueOf(),
-        endDate: null,
-        stationId: stationSaved.id,
-      });
-      console.log(stationSaved.id)
-      const sensorSaved = await SensorRepository.save(sensorCreated);
+      } else {
+        const paramsTypeCreated = ParameterTypeRepository.create({
+          name: parameterType.name,
+          factor: parameterType.factor,
+          unit: parameterType.unit,
+          type: parameterType.type
+        });
+        const paramsTypeSaved = await ParameterTypeRepository.save(paramsTypeCreated);
 
-      console.log("===================================", sensorSaved)
+        const paramsCreated = ParameterRepository.create({
+          stationId: stationSaved.id,
+          parameterTypeId: paramsTypeSaved.id,
+        });
+        const paramsSaved = await ParameterRepository.save(paramsCreated);
+
+      }
     });
 
     return { "message": "Estação cadastrada com sucesso", "status": 201 };
@@ -76,7 +87,7 @@ export async function findStation(req: Request, res: Response) {
   try {
     const stationFound = await StationRepository.findOne({
       relations: {
-        sensors: true
+        parameters: true
       },
       where: {
         id,
@@ -113,12 +124,6 @@ export async function activateStation(req: Request, res: Response) {
       .update(Station)
       .set({ startdate: Date.now().valueOf() as any, isActive: true as any })
       .where("id = :id", { id: id })
-      .execute();
-
-    await SensorRepository.createQueryBuilder()
-      .update(Sensor)
-      .set({ startDate: Date.now().valueOf() })
-      .where("stationId = :id", { id: id })
       .execute();
 
     return {

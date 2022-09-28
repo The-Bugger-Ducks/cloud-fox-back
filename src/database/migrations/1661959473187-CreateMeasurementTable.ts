@@ -1,18 +1,17 @@
 import { MigrationInterface, QueryRunner, Table, TableColumn, TableForeignKey } from "typeorm"
 
-export class CreateCollects1661959473187 implements MigrationInterface {
+export class CreateMeasurementTable1661959473187 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
     await queryRunner.createTable(new Table({
-      name: "collects",
+      name: "measurement",
       columns: [
         {
           name: 'id',
-          type: 'uuid',
+          type: 'int',
           isPrimary: true,
           isGenerated: true,
-          generationStrategy: "uuid"
+          generationStrategy: "increment"
         },
         {
           name: "moment",
@@ -24,25 +23,25 @@ export class CreateCollects1661959473187 implements MigrationInterface {
           type: "float"
         },
         {
-          name: "sensorId",
-          type: "uuid"
+          name: "parameterId",
+          type: "int"
         }
       ]
     }));
 
     await queryRunner.createForeignKey(
-      "collects",
+      "measurement",
       new TableForeignKey({
-        columnNames: ["sensorId"],
+        columnNames: ["parameterId"],
         referencedColumnNames: ["id"],
-        referencedTableName: "sensors",
+        referencedTableName: "parameter",
         onDelete: "CASCADE",
       }),
     )
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('collects');
+    await queryRunner.dropTable('measurement');
   }
 
 }

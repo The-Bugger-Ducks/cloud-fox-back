@@ -1,12 +1,10 @@
 import { Entity, Column, OneToMany, JoinColumn, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
-import { v4 as uuid } from 'uuid';
-import { Sensor } from './Sensor';
+import { Parameter } from './Parameter';
 
 
-@Entity('stations')
+@Entity('station')
 export class Station {
-  [x: string]: any;
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('identity')
   id: string;
 
   @Column()
@@ -27,13 +25,7 @@ export class Station {
   @Column()
   isActive: boolean;
 
-  @OneToMany(() => Sensor, (sensor) => sensor.station)
+  @OneToMany(() => Parameter, (parameter) => parameter.station)
   @JoinColumn()
-  sensors: Sensor[];
-
-  constructor() {
-    if (!this.id) {
-      this.id = uuid();
-    }
-  }
+  parameters: Parameter[];
 }

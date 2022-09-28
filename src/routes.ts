@@ -5,11 +5,10 @@ import { Request, Response, Router } from 'express';
 // import AuthController from './app/controllers/AuthController';
 import UserController from './app/controllers/UserController';
 import StationController from './app/controllers/StationController';
-import CollectController from './app/controllers/CollectController';
 import SolicitationController from './app/controllers/SolicitationController';
+import ParameterTypeController from './app/controllers/ParameterTypeController';
+import MeasurementController from './app/controllers/MeasurementController';
 import DashboardController from './app/controllers/DashboardController';
-import SensorController from './app/controllers/SensorController';
-
 class Welcome {
   static getWelcome(req: Request, res: Response) {
     return res.send({ message: "CloudFox's API 🦊 ⛈️ 🌪️ " })
@@ -40,15 +39,15 @@ router.post('/stations', StationController.stationCreate);
 router.put('/stations/activate/:id', StationController.stationActivate);
 router.delete('/stations/:id', StationController.stationDelete);
 
-router.get('/sensors', SensorController.index);
-router.get('/sensors/:id', SensorController.show);
-router.post('/sensors', SensorController.sensorCreate);
-router.delete('/sensors/:id', SensorController.sensorDelete);
+router.get('/parametersType', ParameterTypeController.index);
+router.get('/parametersType/:id', ParameterTypeController.show);
+router.post('/parametersType', ParameterTypeController.parameterTypeCreate);
+router.delete('/parametersType/:id', ParameterTypeController.parameterTypeDelete);
 
-router.get('/collects', CollectController.index);
-router.get('/collects/:id', CollectController.show);
-router.post('/collects', CollectController.collectCreate);
-router.delete('/collects/:id', CollectController.collectDelete);
+router.get('/measurements', MeasurementController.index);
+router.get('/measurements/:id', MeasurementController.show);
+router.post('/measurements', MeasurementController.measurementCreate);
+router.delete('/measurements/:id', MeasurementController.measurementDelete);
 
 
 

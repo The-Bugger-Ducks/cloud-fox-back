@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { UserRole } from '../enums/UserRoleEnum';
 import { Solicitation } from './Solicitation';
 
-@Entity('users')
+@Entity('user')
 export class User {
   @PrimaryGeneratedColumn('increment')
   id: string;
