@@ -89,6 +89,32 @@ export async function createUser(req: Request, res: Response) {
   }
 }
 
+export async function updateRole(req: Request, res: Response) {
+  const userRepository = AppDataSource.getRepository(User);
+  const { id, role } = req.body
+
+  const userExists = await userRepository.findOne({ where: { id } })
+
+  if (userExists) {
+    const user = await userRepository.createQueryBuilder()
+      .update(User)
+      .set({ role: role })
+      .where("id = :id", { id: id })
+      .returning('*')
+      .execute();
+
+    return {
+      "message": user.raw[0],
+      "status": 200
+    };
+  } else {
+    return {
+      "message": "Usuário não foi encontrado.",
+      "status": 404
+    };
+  }
+}
+
 export async function deleteUser(req: Request, res: Response) {
   const { id } = req.params;
   const userRepository = AppDataSource.getRepository(User);

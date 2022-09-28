@@ -27,6 +27,7 @@ router.get('/users', UserController.index);
 router.get('/users/:id', UserController.show);
 router.get('/users/advanced', UserController.findAdvancedUsers);
 router.post('/users', UserController.store);
+router.put('/users/updateRole', UserController.updateRole);
 router.delete('/users/:id', UserController.delete);
 
 router.get('/solicitations', SolicitationController.index);
