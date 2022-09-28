@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
-import { ParameterTypeRepository } from '../../repositories/ParameterTypeRepository';
+import { ParameterRepository } from '../../repositories/ParameterRepository';
 import { createParameterType, deleteParameterType, findParameterType } from '../services/ParameterTypeService';
 
 
 class ParameterTypeController {
   async index(req: Request, res: Response) {
-    const parameterTypesFound = await ParameterTypeRepository.find();
+    const parameterTypesFound = await ParameterRepository.find({
+      relations: { station: true, measurements: true }
+    });
     return res.json(parameterTypesFound);
   }
 

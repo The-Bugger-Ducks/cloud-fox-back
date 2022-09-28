@@ -9,6 +9,7 @@ import SolicitationController from './app/controllers/SolicitationController';
 import ParameterTypeController from './app/controllers/ParameterTypeController';
 import MeasurementController from './app/controllers/MeasurementController';
 import DashboardController from './app/controllers/DashboardController';
+import ParameterController from './app/controllers/ParameterController';
 class Welcome {
   static getWelcome(req: Request, res: Response) {
     return res.send({ message: "CloudFox's API 🦊 ⛈️ 🌪️ " })
@@ -44,6 +45,8 @@ router.get('/parametersType', ParameterTypeController.index);
 router.get('/parametersType/:id', ParameterTypeController.show);
 router.post('/parametersType', ParameterTypeController.parameterTypeCreate);
 router.delete('/parametersType/:id', ParameterTypeController.parameterTypeDelete);
+
+router.get('/parameters', ParameterController.index);
 
 router.get('/measurements', MeasurementController.index);
 router.get('/measurements/:id', MeasurementController.show);
