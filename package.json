@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npx nodemon --exec ts-node --files src/index.ts",
     "typeorm": "npx ts-node ./node_modules/typeorm/cli.js",
-    "revert:run": "yarn typeorm migration:revert -d ./src/data-source.ts && yarn typeorm migration:revert -d ./src/data-source.ts && yarn typeorm migration:revert -d ./src/data-source.ts && yarn typeorm migration:revert -d ./src/data-source.ts && yarn typeorm migration:run -d ./src/data-source.ts"
+    "revert:run": "yarn typeorm migration:revert -d ./src/data-source.ts && yarn typeorm migration:revert -d ./src/data-source.ts && yarn typeorm migration:revert -d ./src/data-source.ts && yarn typeorm migration:revert -d ./src/data-source.ts && yarn typeorm migration:revert -d ./src/data-source.ts && yarn typeorm migration:revert -d ./src/data-source.ts && yarn typeorm migration:run -d ./src/data-source.ts"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
