@@ -12,7 +12,9 @@ class StationController {
     if (req.query.isActive == 'true') {
       const stationsFound = await StationRepository.find({
         relations: {
-          parameters: true
+          parameters: {
+            parameterType: true,
+          },
         },
         where: {
           isActive: true
@@ -23,8 +25,10 @@ class StationController {
 
     const stationsFound = await StationRepository.find({
       relations: {
-        parameters: true
-      }
+        parameters: {
+          parameterType: true,
+        },
+      },
     });
     return res.json(stationsFound);
   }
@@ -38,7 +42,7 @@ class StationController {
     const { parameterTypes }: { parameterTypes: Array<ICreateParameterType> } = req.body;
     let createResponse;
 
-    if (!parameterTypes || parameterTypes.length < 0) {
+    if (!parameterTypes || parameterTypes.length <= 0) {
       createResponse = await createStation(req, res);
     } else {
       createResponse = await createStationWithParameterTypes(req, res);

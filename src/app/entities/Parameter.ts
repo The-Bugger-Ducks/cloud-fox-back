@@ -8,7 +8,6 @@ export class Parameter {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-
   @Column({ nullable: true })
   @JoinColumn({ referencedColumnName: 'station' })
   stationId: string;
