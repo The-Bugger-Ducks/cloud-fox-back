@@ -11,9 +11,10 @@ class DashboardController {
 		const paramTypeFound = await ParameterTypeRepository.findOne({ where: { type: String(paramType) } });
 
 		try {
-			let collects;
+			let collects = null;
 
 			if (paramType === null || paramType === 'null' || paramType == undefined) {
+				return res.status(404).json("O tipo do parametro não foi informado: ex: ?stationId=C14H&paramType=heat");
 				collects = await getAllParams(req, res);
 			} else {
 				collects = await getSingleParam(req, res);
