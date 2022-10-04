@@ -11,11 +11,6 @@ class StationController {
 
     if (req.query.isActive == 'true') {
       const stationsFound = await StationRepository.find({
-        relations: {
-          parameters: {
-            parameterType: true,
-          },
-        },
         where: {
           isActive: true
         }
@@ -23,13 +18,7 @@ class StationController {
       return res.json(stationsFound);
     }
 
-    const stationsFound = await StationRepository.find({
-      relations: {
-        parameters: {
-          parameterType: true,
-        },
-      },
-    });
+    const stationsFound = await StationRepository.find();
     return res.json(stationsFound);
   }
 

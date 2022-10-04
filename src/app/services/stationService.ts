@@ -87,7 +87,9 @@ export async function findStation(req: Request, res: Response) {
   try {
     const stationFound = await StationRepository.findOne({
       relations: {
-        parameters: true
+        parameters: {
+          parameterType: true
+        }
       },
       where: {
         id,

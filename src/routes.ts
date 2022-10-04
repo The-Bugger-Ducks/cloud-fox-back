@@ -22,7 +22,7 @@ router.get('/', Welcome.getWelcome);
 
 // router.post('/auth', AuthController.authenticate);
 
-// router.get('/dashboard', DashboardController.getSingleOrAllParameters);
+router.get('/dashboard', DashboardController.getSingleOrAllParameters);
 
 router.get('/users', UserController.index);
 router.get('/users/:id', UserController.show);
