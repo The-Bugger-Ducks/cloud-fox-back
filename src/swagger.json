@@ -155,65 +155,24 @@
         }
       }
     },
-    "/stations/": {
-      "get": {
-        "summary": "Get All Station",
-        "description": "This route has objective to get all station",
+    "/users/solicitation": {
+      "post": {
+        "summary": "Register a solicitation to change user role",
+        "description": "This route has objective to Register a solicitation to change user role",
         "tags": [
-          "Stations"
+          "Solicitations"
         ],
-        "parameters": [
-          {
-            "name": "isActive",
-            "description": "Colocar na URL ?isActive=true se desejar somente estações ativas",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "required": false
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Station"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/stations/{id}/": {
-      "put": {
-        "summary": "Activate One Station",
-        "description": "This route has objective to activate a station",
-        "tags": [
-          "Stations"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Station Id for search",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "$ref": "#/components/schemas/Station"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSolicitation"
+              },
+              "examples": {
+                "user-nancy": {
+                  "value": {
+                    "roleReq": "advanced",
+                    "user": "9c6571a2-9fde-4a11-9949-9be4118a7b83"
                   }
                 }
               }
@@ -221,137 +180,54 @@
           }
         }
       },
-      "delete": {
-        "summary": "Delete One Station",
-        "description": "This route has objective to delete a station",
-        "tags": [
-          "Stations"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Station Id for search",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": "Estação deletada com sucesso"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": "Estação não encontrada"
-                  }
+      "responses": {
+        "201": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": "Solicitação criada"
                 }
               }
             }
           }
-        }
-      }
-    },
-    "/collects/": {
-      "post": {
-        "summary": "Register parameters from sensors",
-        "description": "This route has objective to register parameters from sensors",
-        "tags": [
-          "Collects"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": "coleta cadastrada com sucesso"
-                  }
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": "Conflito,horario já cadastrado"
-                  }
+        },
+        "404": {
+          "description": "Not Found",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": "Usuário não encontrado"
                 }
               }
             }
           }
-        }
-      }
-    },
-    "/dashboard/": {
-      "get": {
-        "summary": "Get Parameters from stations collects",
-        "description": "This route has objective to get data from stations",
-        "tags": [
-          "Dashboard"
-        ],
-        "parameters": [
-          {
-            "name": "stationId",
-            "in": "query",
-            "description": "Station Id for search",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "parameter",
-            "in": "query",
-            "description": "Parameter filter for query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Dashboard"
-                  }
+        },
+        "409": {
+          "description": "Conflict",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": "Essa solicitação já existe"
                 }
               }
             }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": "Dados não encontrados com este filtro"
-                  }
+          }
+        },
+        "400": {
+          "description": "Bad Request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": "Você já possuí este nível de acesso"
                 }
               }
             }
@@ -434,24 +310,33 @@
         }
       }
     },
-    "/users/solicitation": {
-      "post": {
-        "summary": "Register a solicitation to change user role",
-        "description": "This route has objective to Register a solicitation to change user role",
+    "/stations/": {
+      "get": {
+        "summary": "Get All Station",
+        "description": "This route has objective to get all station",
         "tags": [
-          "Solicitations"
+          "Stations"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateSolicitation"
-              },
-              "examples": {
-                "user-nancy": {
-                  "value": {
-                    "roleReq": "advanced",
-                    "user": "9c6571a2-9fde-4a11-9949-9be4118a7b83"
+        "parameters": [
+          {
+            "name": "isActive",
+            "description": "Colocar na URL ?isActive=true se desejar somente estações ativas",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Station"
                   }
                 }
               }
@@ -459,54 +344,236 @@
           }
         }
       },
-      "responses": {
-        "201": {
-          "description": "OK",
+      "post": {
+        "summary": "Register station in the system",
+        "description": "This route has objective to register station in the system",
+        "tags": [
+          "Stations"
+        ],
+        "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "message": "Solicitação criada"
+                "$ref": "#/components/schemas/CreateStation"
+              },
+              "examples": {
+                "station": {
+                  "value": {
+                    "id": "C14H",
+                    "name": "Estação do Sr. Branco",
+                    "lat": 1511151,
+                    "lon": 1111151,
+                    "description": "Estação que mede valores para o sr. Branco",
+                    "parameterTypes": [
+                      {
+                        "name": "Chuva 0.25",
+                        "unit": "mm²",
+                        "factor": 0.25,
+                        "type": "pluv"
+                      },
+                      {
+                        "name": "Temperatura",
+                        "unit": "°C",
+                        "factor": 0.1,
+                        "type": "temp"
+                      }
+                    ]
+                  }
                 }
               }
             }
           }
         },
-        "404": {
-          "description": "Not Found",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": "medida cadastrada com sucesso"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stations/{id}/": {
+      "delete": {
+        "summary": "Delete One Station",
+        "description": "This route has objective to delete a station",
+        "tags": [
+          "Stations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Station Id for search",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": "Estação deletada com sucesso"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": "Estação não encontrada"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stations/activate/:id": {
+      "put": {
+        "summary": "Activate One Station",
+        "description": "This route has objective to activate a station",
+        "tags": [
+          "Stations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Station Id for search",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "message": "Estação foi ativada"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/parametersType": {
+      "post": {
+        "summary": "Register new parameter type in an exist station",
+        "description": "This route has objective register new parameter type in an exist station",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParameterTypes"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/measurements/": {
+      "post": {
+        "summary": "Register measurements from stations",
+        "description": "This route has objective to register measurements from stations",
+        "tags": [
+          "Measurements"
+        ],
+        "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "error": "Usuário não encontrado"
+                  "$ref": "#/components/schemas/CreateMeasurements"
                 }
               }
             }
           }
         },
-        "409": {
-          "description": "Conflict",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "error": "Essa solicitação já existe"
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": "medida cadastrada com sucesso"
+                  }
                 }
               }
             }
           }
-        },
-        "400": {
-          "description": "Bad Request",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "error": "Você já possuí este nível de acesso"
+        }
+      }
+    },
+    "/dashboard/": {
+      "get": {
+        "summary": "Get Parameters from stations collects",
+        "description": "This route has objective to get data from stations",
+        "tags": [
+          "Dashboard"
+        ],
+        "parameters": [
+          {
+            "name": "stationId",
+            "in": "query",
+            "description": "Station Id for search",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "parameter",
+            "in": "query",
+            "description": "Parameter filter for query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Dashboard"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": "Dados não encontrados com este filtro"
+                  }
                 }
               }
             }
@@ -554,10 +621,13 @@
           }
         }
       },
-      "Station": {
+      "CreateStation": {
         "type": "object",
         "properties": {
           "id": {
+            "type": "string"
+          },
+          "name": {
             "type": "string"
           },
           "lat": {
@@ -566,7 +636,47 @@
           "lon": {
             "type": "number"
           },
-          "localReference": {
+          "description": {
+            "type": "string"
+          },
+          "parameterTypes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "unit": {
+                  "type": "string"
+                },
+                "factor": {
+                  "type": "number"
+                },
+                "type": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Station": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lat": {
+            "type": "number"
+          },
+          "lon": {
+            "type": "number"
+          },
+          "description": {
             "type": "string"
           },
           "startDate": {
@@ -574,6 +684,57 @@
           },
           "isActive": {
             "type": "boolean"
+          },
+          "parameterTypes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "unit": {
+                  "type": "string"
+                },
+                "factor": {
+                  "type": "number"
+                },
+                "type": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ParameterTypes": {
+        "type": "object",
+        "properties": {
+          "parameterTypes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "unit": {
+                  "type": "string"
+                },
+                "factor": {
+                  "type": "number"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "stationId": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       },
@@ -687,6 +848,28 @@
           },
           "user": {
             "type": "string"
+          }
+        }
+      },
+      "CreateMeasurements": {
+        "type": "object",
+        "properties": {
+          "stationId": {
+            "type": "string"
+          },
+          "measurements": {
+            "type": "object",
+            "properties": {
+              "heat": {
+                "type": "number"
+              },
+              "pluv": {
+                "type": "number"
+              }
+            }
+          },
+          "moment": {
+            "type": "number"
           }
         }
       }
