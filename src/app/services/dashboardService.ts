@@ -8,6 +8,9 @@ export async function getSingleParam(req: Request, res: Response) {
   const { stationId, startDate, endDate, paramType } = req.query;
 
   const collectSingleParam = await MeasurementRepository.find({
+    select: [
+      'id', 'moment', 'value'
+    ],
     where: {
       // moment: Between(parseInt(String(startDate)), parseInt(String(endDate)))
       parameter: {
