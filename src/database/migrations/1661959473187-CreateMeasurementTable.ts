@@ -15,8 +15,7 @@ export class CreateMeasurementTable1661959473187 implements MigrationInterface {
         },
         {
           name: "moment",
-          type: "bigInt",
-          isUnique: true
+          type: "bigInt"
         },
         {
           name: "value",

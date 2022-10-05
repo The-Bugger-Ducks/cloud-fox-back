@@ -1,17 +1,46 @@
 import { Request, Response } from 'express';
 import { MeasurementRepository } from '../../repositories/MeasurementRepository';
+import { ParameterRepository } from '../../repositories/ParameterRepository';
+import { ParameterTypeRepository } from '../../repositories/ParameterTypeRepository';
+import { StationRepository } from '../../repositories/StationRepository';
 
 
 export async function measurementCreate(req: Request, res: Response) {
-  const { moment, parameterId, value } = req.body
+  const { stationId, measurements, moment }: { stationId: string, measurements: object, moment: number } = req.body
 
-  const newCollect = MeasurementRepository.create({ moment, parameterId, value });
-  await MeasurementRepository.save(newCollect)
-
-  return {
-    "message": "Coletor cadastrada com sucesso",
-    "status": 201
+  const stationExists = await StationRepository.findOne({ where: { id: stationId } });
+  if (!stationExists) {
+    return {
+      "message": "Estação ainda não cadastrada!",
+      "status": 404
+    }
   }
+
+  for (let [key, value] of Object.entries(measurements)) {
+    const parameterTypeFound = await ParameterTypeRepository.findOne({
+      where: {
+        type: key
+      }
+    });
+    if (!parameterTypeFound) {
+      return { "message": "Tipo do Parametro não cadastrado ainda!", "status": 404 }
+    }
+
+    const parameterFound = await ParameterRepository.findOne({
+      where: {
+        stationId: stationId,
+        parameterTypeId: parameterTypeFound.id
+      }
+    });
+    if (!parameterFound) {
+      return { "message": "Parametro não cadastrado ainda!", "status": 404 }
+    }
+
+    const newCollect = MeasurementRepository.create({ moment, parameterId: parameterFound.id, value: value });
+    await MeasurementRepository.save(newCollect);
+  }
+
+  return { "message": "Medida cadastrada com sucesso", "status": 201 }
 }
 
 export async function findMeasurements(req: Request, res: Response) {
@@ -31,7 +60,7 @@ export async function findMeasurements(req: Request, res: Response) {
   } catch (err) {
     return {
       "message": {
-        "error": "Coletor não encontrado"
+        "error": "Medida não encontrada"
       },
       "status": 404
     }
@@ -44,7 +73,7 @@ export async function measurementDelete(req: Request, res: Response) {
 
   if (!hasCollect) {
     return {
-      "message": "Coletor não existe",
+      "message": "Medida não existe",
       "status": 404
     }
   }
@@ -53,7 +82,7 @@ export async function measurementDelete(req: Request, res: Response) {
     await MeasurementRepository.delete({ id: parseInt(id) })
 
     return {
-      "message": "Coletor foi deletado",
+      "message": "Medida foi deletada",
       "status": 200
     }
   } catch (error) {

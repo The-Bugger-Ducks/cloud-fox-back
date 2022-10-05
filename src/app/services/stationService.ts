@@ -86,16 +86,21 @@ export async function findStation(req: Request, res: Response) {
 
   try {
     const stationFound = await StationRepository.findOne({
-      relations: {
-        parameters: true
-      },
       where: {
         id,
       },
     });
 
+    const paramsTypeFound = await ParameterTypeRepository.find({
+      where: {
+        parameter: {
+          stationId: id
+        }
+      }
+    });
+
     return {
-      "message": stationFound,
+      "message": { "station": stationFound, "parameterTypes": paramsTypeFound },
       "status": 200
     };
   } catch (err) {
