@@ -32,20 +32,33 @@ export async function findUser(req: Request, res: Response) {
 export async function findAdvancedUsers(req: Request, res: Response) {
   const userRepository = AppDataSource.getRepository(User);
 
-  const usersFound = await userRepository.find({
-    where: [{
-      role: UserRole.ADVANCED
-    },
-    {
-      role: UserRole.ADMIN
-    }],
-    order: {
-      role: 'ASC',
-      username: 'ASC'
-    }
-  });
+  try {
+    const usersFound = await userRepository.find({
+      where: [{
+        role: UserRole.ADVANCED
+      },
+      {
+        role: UserRole.ADMIN
+      }],
+      order: {
+        role: 'ASC',
+        username: 'ASC'
+      }
+    });
 
-  return { "message": "mama eu", "status": 400 }
+    return {
+      "message": usersFound,
+      "status": 200
+    };
+
+  } catch (err) {
+    return {
+      "message": {
+        "error": "usuário não encontrado"
+      },
+      "status": 404
+    }
+  }
 }
 
 export async function createUser(req: Request, res: Response) {
