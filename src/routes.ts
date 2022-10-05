@@ -25,8 +25,8 @@ router.get('/', Welcome.getWelcome);
 router.get('/dashboard', DashboardController.getSingleOrAllParameters);
 
 router.get('/users', UserController.index);
-router.get('/users/:id', UserController.show);
 router.get('/users/advanced', UserController.findAdvancedUsers);
+router.get('/users/:id', UserController.show);
 router.post('/users', UserController.store);
 router.put('/users/updateRole', UserController.updateRole);
 router.delete('/users/:id', UserController.delete);
@@ -36,9 +36,9 @@ router.post('/users/solicitation', SolicitationController.solicitationtCreate);
 router.delete('/solicitation', SolicitationController.solicitationtDelete);
 
 router.get('/stations', StationController.index);
+router.put('/stations/activate/:id', StationController.stationActivate);
 router.get('/stations/:id', StationController.show);
 router.post('/stations', StationController.stationCreate);
-router.put('/stations/activate/:id', StationController.stationActivate);
 router.delete('/stations/:id', StationController.stationDelete);
 
 router.get('/parametersType', ParameterTypeController.index);
