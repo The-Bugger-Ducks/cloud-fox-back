@@ -10,17 +10,18 @@ import { StationRepository } from "./../../repositories/StationRepository"
 
 
 export async function createStation(req: Request, res: Response) {
-  const { name, lat, lon, description, startdate } = req.body;
+  const { id, name, lat, lon, description } = req.body;
 
   const hasStation = await StationRepository.findOne({ where: { lat, lon } })
   if (!hasStation) {
     const newStation = StationRepository.create({
+      id,
       name,
       lat,
       lon,
       description,
-      startdate,
-      isActive: false
+      isActive: false,
+      startdate: null
     });
     await StationRepository.save(newStation);
 

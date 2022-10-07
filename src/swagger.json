@@ -91,7 +91,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "Nome do produto para busca",
+            "description": "User ID for search",
             "required": true
           }
         ],
@@ -147,6 +147,30 @@
                   "type": "object",
                   "properties": {
                     "error": "Usuário não encontrado"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/updateRole": {
+      "put": {
+        "summary": "Update user role",
+        "description": "This route has objective to update a user role",
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "$ref": "#/components/schemas/User"
                   }
                 }
               }
@@ -402,6 +426,36 @@
       }
     },
     "/stations/{id}/": {
+      "get": {
+        "summary": "Get One Station",
+        "description": "This route has objective to get one stations",
+        "tags": [
+          "Stations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Station ID for search",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "$ref": "#/components/schemas/Station"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "summary": "Delete One Station",
         "description": "This route has objective to delete a station",
@@ -477,6 +531,9 @@
       "post": {
         "summary": "Register new parameter type in an exist station",
         "description": "This route has objective register new parameter type in an exist station",
+        "tags": [
+          "Parameter Types"
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -499,24 +556,33 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "$ref": "#/components/schemas/CreateMeasurements"
+                "$ref": "#/components/schemas/CreateMeasurements"
+              },
+              "examples": {
+                "station": {
+                  "value": {
+                    "stationId": "C14H",
+                    "measurements": {
+                      "heat": 25,
+                      "pluv": 7
+                    },
+                    "moment": 1664967600
+                  }
                 }
               }
             }
           }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": "medida cadastrada com sucesso"
-                  }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": "medida cadastrada com sucesso"
                 }
               }
             }
@@ -545,7 +611,7 @@
             "name": "parameter",
             "in": "query",
             "description": "Parameter filter for query",
-            "required": false,
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -557,22 +623,9 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Dashboard"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
                   "type": "object",
                   "properties": {
-                    "error": "Dados não encontrados com este filtro"
+                    "$ref": "#/components/schemas/Dashboard"
                   }
                 }
               }
@@ -614,6 +667,17 @@
             "type": "string"
           },
           "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateRole": {
+        "type": "object",
+        "properties": {
+          "id": {
             "type": "string"
           },
           "role": {
@@ -741,58 +805,14 @@
       "Dashboard": {
         "type": "object",
         "properties": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "$ref": "#/components/schemas/Station"
-            }
+          "id": {
+            "type": "string"
           },
-          "collects": {
-            "type": "array",
-            "items": {
-              "id": {
-                "type": "string"
-              },
-              "moment": {
-                "type": "string"
-              },
-              "pluvValue": {
-                "type": "number"
-              },
-              "pluvUnit": {
-                "type": "string"
-              },
-              "heatValue": {
-                "type": "number"
-              },
-              "heatUnit": {
-                "type": "string"
-              },
-              "atmPresValue": {
-                "type": "number"
-              },
-              "atmPresUnit": {
-                "type": "string"
-              },
-              "humidityValue": {
-                "type": "number"
-              },
-              "humidityUnit": {
-                "type": "string"
-              },
-              "windDirectionValue": {
-                "type": "number"
-              },
-              "windDirectionUnit": {
-                "type": "string"
-              },
-              "windVelocityValue": {
-                "type": "number"
-              },
-              "windVelocityUnit": {
-                "type": "string"
-              }
-            }
+          "moment": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
           }
         }
       },
