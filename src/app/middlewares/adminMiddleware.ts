@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { UserRepository } from '../../repositories/UserRepository';
+
 
 interface TokenPayload {
-  id: string;
-  iad: number;
-  exp: number;
+  id:string;
 }
 
-export default function authMiddleware(
+export default async function adminMiddleware(
   req: Request, res: Response, next: NextFunction
 ) {
   const { authorization } = req.headers;
@@ -19,13 +19,16 @@ export default function authMiddleware(
   const token = authorization.replace('Bearer', '').trim();
 
   try {
-    const data = jwt.verify(token, 'secret');
+    const verified = jwt.verify(token, process.env.SECRET_JWT);
+    const { id } = verified as TokenPayload
+    req.userId = id
 
-    const { id } = data as TokenPayload;
-
-    req.userId = id;
-
-    return next();
+    const user = await UserRepository.findOne({ where: { id } })
+    
+    if(user.role === 'admin'){
+      return next();
+    }
+    
   } catch {
     return res.sendStatus(401);
   }

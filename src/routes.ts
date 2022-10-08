@@ -8,6 +8,7 @@ import StationController from './app/controllers/StationController';
 import CollectController from './app/controllers/CollectController';
 import SolicitationController from './app/controllers/SolicitationController';
 import DashboardController from './app/controllers/DashboardController';
+import adminMiddleware from './app/middlewares/adminMiddleware';
 
 class Welcome {
   static getWelcome(req: Request, res: Response) {
@@ -24,7 +25,7 @@ router.get('/users/:id', UserController.show);
 router.post('/users', UserController.store);
 router.delete('/users/:id', UserController.delete);
 
-router.get('/solicitations', SolicitationController.index);
+router.get('/solicitations', adminMiddleware, SolicitationController.index);
 router.post('/users/solicitation', SolicitationController.solicitationtCreate);
 router.delete('/solicitation', SolicitationController.solicitationtDelete);
 
