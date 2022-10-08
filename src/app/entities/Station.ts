@@ -1,14 +1,10 @@
-import { Entity, Column, OneToMany, PrimaryColumn } from 'typeorm';
-import { Collect } from './Collect';
-import { Solicitation } from './Solicitation';
+import { Entity, Column, OneToMany, JoinColumn, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
+import { Parameter } from './Parameter';
 
 
-@Entity('stations')
+@Entity('station')
 export class Station {
-  @PrimaryColumn({
-    default: false,
-    nullable: false,
-  })
+  @PrimaryGeneratedColumn('identity')
   id: string;
 
   @Column()
@@ -29,6 +25,7 @@ export class Station {
   @Column()
   isActive: boolean;
 
-  @OneToMany(() => Collect, (collect) => collect.station)
-  collects: Collect[];
+  @OneToMany(() => Parameter, (parameter) => parameter.station)
+  @JoinColumn()
+  parameters: Parameter[];
 }
