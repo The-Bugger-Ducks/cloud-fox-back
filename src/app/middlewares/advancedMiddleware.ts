@@ -5,6 +5,7 @@ import { User } from '../entities/User';
 
 interface TokenPayload {
   id:string;
+  role:string;
 }
 
 export default async function advacedMiddleware(
@@ -20,12 +21,13 @@ export default async function advacedMiddleware(
 
   try {
     const verified = jwt.verify(token, process.env.SECRET_JWT);
-    const { id } = verified as TokenPayload
+    const { id, role  } = verified as TokenPayload
     req.userId = id
+    req.role = role
 
-    const user = await UserRepository.findOne({ where: { id } })
+    // const user = await UserRepository.findOne({ where: { id } })
 
-    if (user.role === 'advanced'){
+    if (role === 'advanced' || 'admin'){
         return next();
     }
     

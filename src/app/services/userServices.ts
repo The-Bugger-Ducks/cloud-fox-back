@@ -82,14 +82,14 @@ export async function createUser(req: Request, res: Response) {
       { expiresIn: '1d' });
 
     return {
-      "message": user,token,
+      "message": {user,token},
       "status": 201
     };
   } else {
     const token = jwt.sign({ id: userExists.id, role: userExists.role }, process.env.SECRET_JWT, 
       { expiresIn: '1d' });
     return {
-      "message": userExists,token,
+      "message": {userExists,token},
       "status": 200
     };
   }
