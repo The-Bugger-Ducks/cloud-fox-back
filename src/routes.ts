@@ -29,7 +29,7 @@ router.get('/dashboard', DashboardController.getSingleOrAllParameters);
 
 router.get('/users', adminMiddleware, UserController.index);
 router.get('/users/advanced', adminMiddleware, UserController.findAdvancedUsers);
-router.get('/users/:id', adminMiddleware, UserController.show);
+router.get('/users/:id', UserController.show);
 router.post('/users', UserController.store);
 router.put('/users/updateRole',adminMiddleware, UserController.updateRole);
 router.delete('/users/:id', adminMiddleware, UserController.delete);
