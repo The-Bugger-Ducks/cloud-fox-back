@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
 import { v4 as uuid } from 'uuid';
 import { User } from "./User";
 
 
-@Entity('solicitations')
+@Entity('solicitation')
 export class Solicitation {
   @PrimaryGeneratedColumn('increment')
   id: string;

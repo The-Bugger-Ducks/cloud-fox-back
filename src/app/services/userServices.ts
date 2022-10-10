@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from "../../data-source";
 import { User } from "../entities/User";
+import jwt from 'jsonwebtoken';
+import { UserRole } from '../enums/UserRoleEnum';
 
 export async function findUser(req: Request, res: Response) {
   const { id } = req.params;
@@ -15,6 +17,38 @@ export async function findUser(req: Request, res: Response) {
 
     return {
       "message": userFound,
+      "status": 200
+    };
+
+  } catch (err) {
+    return {
+      "message": {
+        "error": "usuário não encontrado"
+      },
+      "status": 404
+    }
+  }
+}
+
+export async function findAdvancedUsers(req: Request, res: Response) {
+  const userRepository = AppDataSource.getRepository(User);
+
+  try {
+    const usersFound = await userRepository.find({
+      where: [{
+        role: UserRole.ADVANCED
+      },
+      {
+        role: UserRole.ADMIN
+      }],
+      order: {
+        role: 'ASC',
+        username: 'ASC'
+      }
+    });
+
+    return {
+      "message": usersFound,
       "status": 200
     };
 
@@ -44,14 +78,45 @@ export async function createUser(req: Request, res: Response) {
 
     await userRepository.save(user)
 
+    const token = jwt.sign({ id: user.id, role: user.role }, process.env.SECRET_JWT, 
+      { expiresIn: '1d' });
+
     return {
-      "message": user,
+      "message": {user,token},
       "status": 201
     };
   } else {
+    const token = jwt.sign({ id: userExists.id, role: userExists.role }, process.env.SECRET_JWT, 
+      { expiresIn: '1d' });
     return {
-      "message": userExists,
+      "message": {userExists,token},
       "status": 200
+    };
+  }
+}
+
+export async function updateRole(req: Request, res: Response) {
+  const userRepository = AppDataSource.getRepository(User);
+  const { id, role } = req.body
+
+  const userExists = await userRepository.findOne({ where: { id } })
+
+  if (userExists) {
+    const user = await userRepository.createQueryBuilder()
+      .update(User)
+      .set({ role: role })
+      .where("id = :id", { id: id })
+      .returning('*')
+      .execute();
+
+    return {
+      "message": user.raw[0],
+      "status": 200
+    };
+  } else {
+    return {
+      "message": "Usuário não foi encontrado.",
+      "status": 404
     };
   }
 }

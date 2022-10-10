@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   postgres:
-    container_name: postgres_container
+    container_name: cloudfox_postgres
     image: postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
@@ -16,6 +16,20 @@ services:
     networks:
       - postgres
     restart: unless-stopped
+
+  mongo:
+    image: mongo
+    container_name: cloudfox_mongo
+    restart: always
+    env_file: .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD:-root}
+      MONGO_INITDB_DATABASE: ${MONGODB_NAME:-api_iv}
+      MONGO_INITDB_USERNAME: ${MONGODB_USERNAME:-mongo}
+      MONGO_INITDB_PASSWORD: ${MONGODB_PASSWORD:-mongo}
+    ports:
+      - 27017:27017
 
 networks:
   postgres:
