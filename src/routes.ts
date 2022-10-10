@@ -9,7 +9,10 @@ import SolicitationController from './app/controllers/SolicitationController';
 import ParameterTypeController from './app/controllers/ParameterTypeController';
 import MeasurementController from './app/controllers/MeasurementController';
 import DashboardController from './app/controllers/DashboardController';
+import adminMiddleware from './app/middlewares/adminMiddleware';
+
 import ParameterController from './app/controllers/ParameterController';
+import advancedMiddleware from './app/middlewares/advancedMiddleware';
 class Welcome {
   static getWelcome(req: Request, res: Response) {
     return res.send({ message: "CloudFox's API 🦊 ⛈️ 🌪️ " })
@@ -24,29 +27,29 @@ router.get('/', Welcome.getWelcome);
 
 router.get('/dashboard', DashboardController.getSingleOrAllParameters);
 
-router.get('/users', UserController.index);
-router.get('/users/advanced', UserController.findAdvancedUsers);
+router.get('/users', adminMiddleware, UserController.index);
+router.get('/users/advanced', adminMiddleware, UserController.findAdvancedUsers);
 router.get('/users/:id', UserController.show);
 router.post('/users', UserController.store);
-router.put('/users/updateRole', UserController.updateRole);
-router.delete('/users/:id', UserController.delete);
+router.put('/users/updateRole',adminMiddleware, UserController.updateRole);
+router.delete('/users/:id', adminMiddleware, UserController.delete);
 
-router.get('/solicitations', SolicitationController.index);
+router.get('/solicitations', adminMiddleware, SolicitationController.index);
 router.post('/users/solicitation', SolicitationController.solicitationtCreate);
-router.delete('/solicitation', SolicitationController.solicitationtDelete);
+router.delete('/solicitation',adminMiddleware, SolicitationController.solicitationtDelete);
 
 router.get('/stations', StationController.index);
-router.put('/stations/activate/:id', StationController.stationActivate);
+router.put('/stations/activate/:id', advancedMiddleware, StationController.stationActivate);
 router.get('/stations/:id', StationController.show);
-router.post('/stations', StationController.stationCreate);
-router.delete('/stations/:id', StationController.stationDelete);
+router.post('/stations', advancedMiddleware, StationController.stationCreate);
+router.delete('/stations/:id',advancedMiddleware, StationController.stationDelete);
 
-router.get('/parametersType', ParameterTypeController.index);
-router.get('/parametersType/:id', ParameterTypeController.show);
-router.post('/parametersType', ParameterTypeController.parameterTypeCreate);
-router.delete('/parametersType/:id', ParameterTypeController.parameterTypeDelete);
+router.get('/parametersType',advancedMiddleware, ParameterTypeController.index);
+router.get('/parametersType/:id',advancedMiddleware, ParameterTypeController.show);
+router.post('/parametersType', advancedMiddleware, ParameterTypeController.parameterTypeCreate);
+router.delete('/parametersType/:id', advancedMiddleware, ParameterTypeController.parameterTypeDelete);
 
-router.get('/parameters', ParameterController.index);
+router.get('/parameters', advancedMiddleware ,ParameterController.index);
 
 router.get('/measurements', MeasurementController.index);
 router.get('/measurements/:id', MeasurementController.show);

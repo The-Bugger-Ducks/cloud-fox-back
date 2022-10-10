@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from "../../data-source";
 import { User } from "../entities/User";
+import jwt from 'jsonwebtoken';
 import { UserRole } from '../enums/UserRoleEnum';
 
 export async function findUser(req: Request, res: Response) {
@@ -77,13 +78,18 @@ export async function createUser(req: Request, res: Response) {
 
     await userRepository.save(user)
 
+    const token = jwt.sign({ id: user.id, role: user.role }, process.env.SECRET_JWT, 
+      { expiresIn: '1d' });
+
     return {
-      "message": user,
+      "message": {user,token},
       "status": 201
     };
   } else {
+    const token = jwt.sign({ id: userExists.id, role: userExists.role }, process.env.SECRET_JWT, 
+      { expiresIn: '1d' });
     return {
-      "message": userExists,
+      "message": {userExists,token},
       "status": 200
     };
   }
