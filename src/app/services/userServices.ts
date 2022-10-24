@@ -3,6 +3,7 @@ import { AppDataSource } from "../../data-source";
 import { User } from "../entities/User";
 import jwt from 'jsonwebtoken';
 import { UserRole } from '../enums/UserRoleEnum';
+import { Not } from 'typeorm';
 
 export async function findUser(req: Request, res: Response) {
   const { id } = req.params;
@@ -32,15 +33,13 @@ export async function findUser(req: Request, res: Response) {
 
 export async function findAdvancedUsers(req: Request, res: Response) {
   const userRepository = AppDataSource.getRepository(User);
-
+  console.log(req.userId)
   try {
     const usersFound = await userRepository.find({
-      where: [{
-        role: UserRole.ADVANCED
-      },
-      {
-        role: UserRole.ADMIN
-      }],
+      where: [
+        { role: UserRole.ADVANCED },
+        { role: UserRole.ADMIN, id: Not(req.userId) },
+      ],
       order: {
         role: 'ASC',
         username: 'ASC'
@@ -78,18 +77,18 @@ export async function createUser(req: Request, res: Response) {
 
     await userRepository.save(user)
 
-    const token = jwt.sign({ id: user.id, role: user.role }, process.env.SECRET_JWT, 
+    const token = jwt.sign({ id: user.id, role: user.role }, process.env.SECRET_JWT,
       { expiresIn: '1d' });
 
     return {
-      "message": {user,token},
+      "message": { user, token },
       "status": 201
     };
   } else {
-    const token = jwt.sign({ id: userExists.id, role: userExists.role }, process.env.SECRET_JWT, 
+    const token = jwt.sign({ id: userExists.id, role: userExists.role }, process.env.SECRET_JWT,
       { expiresIn: '1d' });
     return {
-      "message": {userExists,token},
+      "message": { userExists, token },
       "status": 200
     };
   }

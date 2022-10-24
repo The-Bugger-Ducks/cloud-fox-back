@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { AppDataSource } from '../../data-source';
 import { Station } from '../entities/Station';
 import { ICreateParameterType } from '../interfaces/ICreateParameterType';
-import { activateStation, createStation, createStationWithParameterTypes, deleteStation, findStation } from '../services/stationService';
+import { activateStation, createStation, createStationWithParameterTypes, deleteStation, findStation, updateStationData } from '../services/stationService';
 
 
 class StationController {
@@ -42,6 +42,11 @@ class StationController {
   async stationActivate(req: Request, res: Response) {
     const activateResponse = await activateStation(req, res);
     return res.status(activateResponse.status).json(activateResponse.message);
+  }
+
+  async updateStationData(req: Request, res: Response) {
+    const updateResponse = await updateStationData(req, res);
+    return res.status(updateResponse.status).json(updateResponse.message);
   }
 
   async stationDelete(req: Request, res: Response) {

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { ParameterRepository } from '../../repositories/ParameterRepository';
 import { ParameterTypeRepository } from '../../repositories/ParameterTypeRepository';
+import logError from '../../utils/logError';
 import { Parameter } from '../entities/Parameter';
 import { ParameterType } from '../entities/ParameterType';
 import { Station } from '../entities/Station';
@@ -142,6 +143,47 @@ export async function activateStation(req: Request, res: Response) {
       "message": "Ocorreu um erro, tente novamente mais tarde.",
       "status": 500
     }
+  }
+}
+
+export async function updateStationData(req: Request, res: Response) {
+  const { id } = req.params
+  const {
+    name,
+    description,
+    lat,
+    lon,
+    isActive
+  } = req.body;
+
+  const stationExist = await StationRepository.findOne({ where: { id } });
+
+  try {
+    if (stationExist) {
+      const stationUpdated = await StationRepository.createQueryBuilder()
+        .update(Station)
+        .set({ name, description, lat, lon, isActive })
+        .where("id = :id", { id })
+        .returning('*')
+        .execute();
+
+      logError('kkkkkkkkk kkkk kkkkkkkkk kkkk kkkkkkkkk kkkk kkkkkkkkk kkkk kkkkkkkkk kkkk ')
+      return {
+        "message": stationUpdated.raw[0],
+        "status": 200
+      };
+    } else {
+      return {
+        "message": "Estação não foi encontrada.",
+        "status": 404
+      };
+    }
+  } catch (err) {
+    logError(err)
+    return {
+      "message": "Ocorreu um erro no servidor, tente novamente mais tarde.",
+      "status": 500
+    };
   }
 }
 
