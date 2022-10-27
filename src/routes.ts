@@ -37,7 +37,7 @@ router.get('/stations', StationController.index);
 router.put('/stations/activate/:id', advancedMiddleware, StationController.stationActivate);
 router.get('/stations/:id', StationController.show);
 router.post('/stations', advancedMiddleware, StationController.stationCreate);
-router.put('/stations/:id', advancedMiddleware, StationController.updateStationData);
+router.put('/stations', advancedMiddleware, StationController.updateStationData);
 router.delete('/stations/:id', advancedMiddleware, StationController.stationDelete);
 
 router.get('/parametersType', advancedMiddleware, ParameterTypeController.index);
