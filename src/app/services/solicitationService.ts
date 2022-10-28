@@ -1,99 +1,69 @@
 import { Request, Response } from 'express';
 import { SolicitationRepository } from '../../repositories/SolicitationRepository';
 import { UserRepository } from '../../repositories/UserRepository';
+import logError from '../../utils/logError';
+import { responseWithStatus } from '../../utils/responseWithStatus';
 
 
 export async function createSolicitation(req: Request, res: Response) {
   const { roleReq, user } = req.body
 
-    const hasUser = await UserRepository.findOne({ 
-        relations:{
-            solicitations:true
-        },
-        where:{id:user}
+  try {
+    const hasUser = await UserRepository.findOne({
+      relations: {
+        solicitations: true
+      },
+      where: { id: user }
     })
-    
-    if (!hasUser) {
-        return{
-            "message": "Esse usuário não foi encontrado",
-            "status": 404
-        }       
-    }
-  
-    if (hasUser.solicitations || hasUser.solicitations != null) {
-        return{
-            "message": "Essa solicitação já existe",
-            "status": 409
-        }       
-    }
 
-    if(hasUser.role == roleReq){
-        return {
-            "message": "Você já possuí este nível de acesso",
-            "status": 400
-        }
-    }
+    if (!hasUser) return responseWithStatus("Esse usuário não foi encontrado", 404);
+
+    if (hasUser.solicitations || hasUser.solicitations != null) return responseWithStatus("Essa solicitação já existe", 409);
+
+    if (hasUser.role == roleReq) return responseWithStatus("Você já possuí este nível de acesso", 400);
 
     const newSolicitation = SolicitationRepository.create({
-       roleReq, user
+      roleReq, user
     })
     await SolicitationRepository.save(newSolicitation)
-    return {
-        "message": "Solicitação criada",
-        "status": 201
-    }    
+    return responseWithStatus("Solicitação criada", 201);
+
+  } catch (err) {
+    logError(req, err);
+    return responseWithStatus("Ocorreu um erro no servidor, tente novamente mais tarde", 500);
+  }
 }
 
 export async function deleteSolicitation(req: Request, res: Response) {
   const { id, role, user } = req.body
 
-  const hasSolicitation = await SolicitationRepository.findOne({
-    relations: {
-      user: true,
-    },
-    where: { id }
+  try {
+    const hasSolicitation = await SolicitationRepository.findOne({
+      relations: {
+        user: true,
+      },
+      where: { id }
 
-  })
+    })
 
-    if(!hasSolicitation){
-        return {
-            "message": "Solicitação não existe",
-            "status": 404
-        }
-    }
+    if (!hasSolicitation) return responseWithStatus("Solicitação não existe", 404);
 
     if (role == null) {
-        await SolicitationRepository.delete({id})
-        return {
-            "message": "Solicitação foi deletada",
-            "status": 200
-        }
+      await SolicitationRepository.delete({ id })
+      return responseWithStatus("Solicitação foi deletada", 200);
     }
 
-    const hasUser = await UserRepository.findOneBy({id:user})
+    const hasUser = await UserRepository.findOneBy({ id: user })
 
-    if(hasSolicitation.roleReq != role){
-        return{
-            "message": "A permissão esta incondizente com a solicitação",
-            "status": 400
-        }
-    }else{
+    if (hasSolicitation.roleReq != role) return responseWithStatus("A permissão esta incondizente com a solicitação", 400);
 
-        hasUser.role = role ? role : hasUser.role
-        await UserRepository.save(hasUser)            
-        await SolicitationRepository.delete({id})
-        return {
-            "message": "Permissão alterada",
-            "status": 200
-        } 
-    }
+    hasUser.role = role ? role : hasUser.role
+    await UserRepository.save(hasUser)
+    await SolicitationRepository.delete({ id })
+    return responseWithStatus("Permissão alterada", 200);
 
-
-
-
-
-
-
-    
-
+  } catch (err) {
+    logError(req, err);
+    return responseWithStatus("Ocorreu um erro no servidor, tente novamente mais tarde", 500);
+  }
 }
