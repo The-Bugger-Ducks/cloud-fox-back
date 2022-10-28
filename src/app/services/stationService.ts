@@ -13,9 +13,7 @@ export async function createStation(req: Request, res: Response) {
 
   try {
     const hasStation = await StationRepository.findOne({ where: { lat, lon } })
-    if (hasStation) {
-      return responseWithStatus("Esta estação já existe", 409);
-    }
+    if (hasStation) return responseWithStatus("Esta estação já existe", 409);
 
     const newStation = StationRepository.create({
       id,
@@ -91,9 +89,7 @@ export async function findStation(req: Request, res: Response) {
 
   try {
     const stationFound = await StationRepository.findOne({ where: { id, } });
-    if (!stationFound) {
-      return responseWithStatus("Estação não foi encontrada.", 404);
-    }
+    if (!stationFound) return responseWithStatus("Estação não foi encontrada.", 404);
 
     const paramsTypeFound = await ParameterTypeRepository.find({
       where: {
@@ -117,9 +113,7 @@ export async function activateStation(req: Request, res: Response) {
 
   try {
     const StationExist = await StationRepository.findOne({ where: { id } })
-    if (!StationExist) {
-      return responseWithStatus("Estação não foi encontrada.", 404);
-    }
+    if (!StationExist) return responseWithStatus("Estação não foi encontrada.", 404);
 
     await StationRepository.createQueryBuilder()
       .update(Station)
@@ -141,9 +135,7 @@ export async function updateStationData(req: Request, res: Response) {
 
   try {
     const stationExist = await StationRepository.findOne({ where: { id } });
-    if (!stationExist) {
-      return responseWithStatus("Estação não foi encontrada.", 404);
-    }
+    if (!stationExist) return responseWithStatus("Estação não foi encontrada.", 404);
 
     const stationUpdated = await StationRepository.createQueryBuilder()
       .update(Station)
@@ -165,9 +157,7 @@ export async function deleteStation(req: Request, res: Response) {
 
   try {
     const StationExist = await StationRepository.findOne({ where: { id } })
-    if (!StationExist) {
-      return responseWithStatus("Estação não existe", 404);
-    }
+    if (!StationExist) return responseWithStatus("Estação não existe", 404);
 
     await StationRepository.delete({ id })
     return responseWithStatus("A Estação foi deletada com sucesso", 200);
