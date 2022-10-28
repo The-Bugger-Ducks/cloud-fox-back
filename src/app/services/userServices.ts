@@ -3,6 +3,8 @@ import { AppDataSource } from "../../data-source";
 import { User } from "../entities/User";
 import jwt from 'jsonwebtoken';
 import { UserRole } from '../enums/UserRoleEnum';
+import { Not } from 'typeorm';
+import logError from '../../utils/logError';
 
 export async function findUser(req: Request, res: Response) {
   const { id } = req.params;
@@ -21,12 +23,8 @@ export async function findUser(req: Request, res: Response) {
     };
 
   } catch (err) {
-    return {
-      "message": {
-        "error": "usuário não encontrado"
-      },
-      "status": 404
-    }
+    logError(req, err);
+    return { "message": { "error": "usuário não encontrado" }, "status": 404 }
   }
 }
 
@@ -35,30 +33,24 @@ export async function findAdvancedUsers(req: Request, res: Response) {
 
   try {
     const usersFound = await userRepository.find({
-      where: [{
-        role: UserRole.ADVANCED
-      },
-      {
-        role: UserRole.ADMIN
-      }],
+      where: [
+        { role: UserRole.ADVANCED },
+        { role: UserRole.ADMIN, id: Not(req.userId) },
+      ],
       order: {
         role: 'ASC',
         username: 'ASC'
       }
     });
 
-    return {
-      "message": usersFound,
-      "status": 200
-    };
+    if (usersFound.length > 0) {
+      return { "message": usersFound, "status": 200 };
+    }
+    return { "message": { "error": "usuário não encontrado" }, "status": 404 }
 
   } catch (err) {
-    return {
-      "message": {
-        "error": "usuário não encontrado"
-      },
-      "status": 404
-    }
+    logError(req, err);
+    return { "message": { "error": "usuário não encontrado" }, "status": 404 }
   }
 }
 
@@ -78,20 +70,18 @@ export async function createUser(req: Request, res: Response) {
 
     await userRepository.save(user)
 
-    const token = jwt.sign({ id: user.id, role: user.role }, process.env.SECRET_JWT, 
+    const token = jwt.sign({ id: user.id, role: user.role }, process.env.SECRET_JWT,
       { expiresIn: '1d' });
 
-    return {
-      "message": {user,token},
-      "status": 201
-    };
+    return { "message": { user, token }, "status": 201 };
   } else {
-    const token = jwt.sign({ id: userExists.id, role: userExists.role }, process.env.SECRET_JWT, 
-      { expiresIn: '1d' });
-    return {
-      "message": {userExists,token},
-      "status": 200
-    };
+    const token = jwt.sign(
+      { id: userExists.id, role: userExists.role },
+      process.env.SECRET_JWT,
+      { expiresIn: '1d' }
+    );
+
+    return { "message": { userExists, token }, "status": 200 };
   }
 }
 
@@ -106,18 +96,11 @@ export async function updateRole(req: Request, res: Response) {
       .update(User)
       .set({ role: role })
       .where("id = :id", { id: id })
-      .returning('*')
-      .execute();
+      .returning('*').execute();
 
-    return {
-      "message": user.raw[0],
-      "status": 200
-    };
+    return { "message": user.raw[0], "status": 200 };
   } else {
-    return {
-      "message": "Usuário não foi encontrado.",
-      "status": 404
-    };
+    return { "message": "Usuário não foi encontrado.", "status": 404 };
   }
 }
 
@@ -132,10 +115,7 @@ export async function deleteUser(req: Request, res: Response) {
   });
 
   if (!userFound) {
-    return {
-      "message": "Usuário não encontrado",
-      "status": 404
-    }
+    return { "message": "Usuário não encontrado", "status": 404 }
   }
 
   try {
@@ -143,17 +123,11 @@ export async function deleteUser(req: Request, res: Response) {
       id
     });
 
-    return {
-      "message": "Usuário deletado com sucesso!",
-      "status": 200
-    };
+    return { "message": "Usuário deletado com sucesso!", "status": 200 };
 
   } catch (err) {
-    console.log('----------- ERR: ' + err)
-    return {
-      "message": "Não foi possível deletar o usuário!",
-      "status": 500
-    }
+    logError(req, err);
+    return { "message": "Não foi possível deletar o usuário!", "status": 500 }
   }
 
 }
