@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
 import { ParameterRepository } from '../../repositories/ParameterRepository';
 import { ParameterTypeRepository } from '../../repositories/ParameterTypeRepository';
-import { Parameter } from '../entities/Parameter';
-import { ParameterType } from '../entities/ParameterType';
+import logError from '../../utils/logError';
+import { responseWithStatus } from '../../utils/responseWithStatus';
 import { Station } from '../entities/Station';
-import { ICreateParameterType } from '../interfaces/ICreateParameterType';
 import { ICreateStationWithParameterTypes } from '../interfaces/ICreateStationWithParameterTypes';
 import { StationRepository } from "./../../repositories/StationRepository"
 
@@ -12,8 +11,10 @@ import { StationRepository } from "./../../repositories/StationRepository"
 export async function createStation(req: Request, res: Response) {
   const { id, name, lat, lon, description } = req.body;
 
-  const hasStation = await StationRepository.findOne({ where: { lat, lon } })
-  if (!hasStation) {
+  try {
+    const hasStation = await StationRepository.findOne({ where: { lat, lon } })
+    if (hasStation) return responseWithStatus("Esta estação já existe", 409);
+
     const newStation = StationRepository.create({
       id,
       name,
@@ -25,60 +26,61 @@ export async function createStation(req: Request, res: Response) {
     });
     await StationRepository.save(newStation);
 
-    return {
-      "message": "Estação cadastrada com sucesso",
-      "status": 201
-    }
+    return responseWithStatus("Estação cadastrada com sucesso", 201);
 
-  } else {
-    return {
-      "message": "Esta estação já existe",
-      "status": 409
-    }
+  } catch (err) {
+    logError(req, err);
+    return responseWithStatus("Ocorreu um erro no servidor, tente novamente mais tarde.", 500);
   }
 }
+
 
 export async function createStationWithParameterTypes(req: Request, res: Response) {
   const { id, name, lat, lon, description, parameterTypes }: ICreateStationWithParameterTypes = req.body;
 
-  const hasStation = await StationRepository.find({ where: { lat, lon } })
+  try {
+    const hasStation = await StationRepository.find({ where: { lat, lon } })
 
-  if (hasStation.length < 1) {
-    const newStation = StationRepository.create({ id, name, lat, lon, description });
-    const stationSaved = await StationRepository.save(newStation);
+    if (hasStation.length < 1) {
+      const newStation = StationRepository.create({ id, name, lat, lon, description });
+      const stationSaved = await StationRepository.save(newStation);
 
-    parameterTypes.map(async parameterType => {
-      const paramsTypeExists = await ParameterTypeRepository.findOne({ where: { name: parameterType.name } })
-      if (paramsTypeExists) {
-        const paramsCreated = ParameterRepository.create({
-          stationId: stationSaved.id,
-          parameterTypeId: paramsTypeExists.id,
-        });
-        const paramsSaved = await ParameterRepository.save(paramsCreated);
+      parameterTypes.map(async parameterType => {
+        const paramsTypeExists = await ParameterTypeRepository.findOne({ where: { name: parameterType.name } })
+        if (paramsTypeExists) {
+          const paramsCreated = ParameterRepository.create({
+            stationId: stationSaved.id,
+            parameterTypeId: paramsTypeExists.id,
+          });
+          const paramsSaved = await ParameterRepository.save(paramsCreated);
 
-      } else {
-        const paramsTypeCreated = ParameterTypeRepository.create({
-          name: parameterType.name,
-          factor: parameterType.factor,
-          unit: parameterType.unit,
-          type: parameterType.type
-        });
-        const paramsTypeSaved = await ParameterTypeRepository.save(paramsTypeCreated);
+        } else {
+          const paramsTypeCreated = ParameterTypeRepository.create({
+            name: parameterType.name,
+            factor: parameterType.factor,
+            unit: parameterType.unit,
+            type: parameterType.type
+          });
+          const paramsTypeSaved = await ParameterTypeRepository.save(paramsTypeCreated);
 
-        const paramsCreated = ParameterRepository.create({
-          stationId: stationSaved.id,
-          parameterTypeId: paramsTypeSaved.id,
-        });
-        const paramsSaved = await ParameterRepository.save(paramsCreated);
+          const paramsCreated = ParameterRepository.create({
+            stationId: stationSaved.id,
+            parameterTypeId: paramsTypeSaved.id,
+          });
+          const paramsSaved = await ParameterRepository.save(paramsCreated);
+        }
+      });
 
-      }
-    });
+      return responseWithStatus("Estação cadastrada com sucesso", 201);
 
-    return { "message": "Estação cadastrada com sucesso", "status": 201 };
+    } else {
+      return responseWithStatus("Esta estação já existe", 409);
+    };
 
-  } else {
-    return { "message": "Esta estação já existe", "status": 409 };
-  };
+  } catch (err) {
+    logError(req, err);
+    return responseWithStatus("Ocorreu um erro no servidor, tente novamente mais tarde.", 500);
+  }
 }
 
 
@@ -86,11 +88,8 @@ export async function findStation(req: Request, res: Response) {
   const { id } = req.params;
 
   try {
-    const stationFound = await StationRepository.findOne({
-      where: {
-        id,
-      },
-    });
+    const stationFound = await StationRepository.findOne({ where: { id, } });
+    if (!stationFound) return responseWithStatus("Estação não foi encontrada.", 404);
 
     const paramsTypeFound = await ParameterTypeRepository.find({
       where: {
@@ -100,72 +99,72 @@ export async function findStation(req: Request, res: Response) {
       }
     });
 
-    return {
-      "message": { "station": stationFound, "parameterTypes": paramsTypeFound },
-      "status": 200
-    };
+    return responseWithStatus({ "station": stationFound, "parameterTypes": paramsTypeFound }, 200);
+
   } catch (err) {
-    return {
-      "message": {
-        "error": "Estação não encontrada"
-      },
-      "status": 404
-    }
+    logError(req, err);
+    return responseWithStatus("Ocorreu um erro no servidor, tente novamente mais tarde.", 500);
   }
 }
+
 
 export async function activateStation(req: Request, res: Response) {
   const { id } = req.params;
 
-  const StationExist = await StationRepository.findOne({ where: { id } })
-  if (!StationExist) {
-    return {
-      "message": "Estação não existe",
-      "status": 404
-    }
-  }
-
   try {
+    const StationExist = await StationRepository.findOne({ where: { id } })
+    if (!StationExist) return responseWithStatus("Estação não foi encontrada.", 404);
+
     await StationRepository.createQueryBuilder()
       .update(Station)
       .set({ startdate: Date.now().valueOf() as any, isActive: true as any })
       .where("id = :id", { id: id })
       .execute();
 
-    return {
-      "message": "Estação foi Ativada",
-      "status": 200
-    }
-  } catch (error) {
-    console.log(error)
-    return {
-      "message": "Ocorreu um erro, tente novamente mais tarde.",
-      "status": 500
-    }
+    return responseWithStatus("A Estação foi Ativada com sucesso", 200);
+
+  } catch (err) {
+    logError(req, err);
+    return responseWithStatus("Ocorreu um erro no servidor, tente novamente mais tarde.", 500);
   }
 }
+
+
+export async function updateStationData(req: Request, res: Response) {
+  const { id, name, description, lat, lon, isActive } = req.body;
+
+  try {
+    const stationExist = await StationRepository.findOne({ where: { id } });
+    if (!stationExist) return responseWithStatus("Estação não foi encontrada.", 404);
+
+    const stationUpdated = await StationRepository.createQueryBuilder()
+      .update(Station)
+      .set({ name, description, lat, lon, isActive })
+      .where("id = :id", { id })
+      .returning('*').execute();
+
+    return responseWithStatus(stationUpdated.raw[0], 200);
+
+  } catch (err) {
+    logError(req, err);
+    return responseWithStatus("Ocorreu um erro no servidor, tente novamente mais tarde.", 500);
+  }
+}
+
 
 export async function deleteStation(req: Request, res: Response) {
   const { id } = req.params
 
-  const StationExist = await StationRepository.findOne({ where: { id } })
-
-  if (!StationExist) {
-    return {
-      "message": "Estação não existe",
-      "status": 404
-    }
-  }
-
   try {
-    await StationRepository.delete({ id })
+    const StationExist = await StationRepository.findOne({ where: { id } })
+    if (!StationExist) return responseWithStatus("Estação não existe", 404);
 
-    return {
-      "message": "Estação foi deletada",
-      "status": 200
-    }
-  } catch (error) {
-    console.log(error);
+    await StationRepository.delete({ id })
+    return responseWithStatus("A Estação foi deletada com sucesso", 200);
+
+  } catch (err) {
+    logError(req, err);
+    responseWithStatus("Ocorreu um erro no servidor, tente novamente mais tarde.", 500);
   }
 }
 
