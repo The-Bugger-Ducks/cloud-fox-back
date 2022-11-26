@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, BeforeInsert } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, BeforeInsert, OneToOne } from 'typeorm';
+import { Alert } from './Alert';
 import { Measurement } from './Measurement';
 import { ParameterType } from './ParameterType';
 import { Station } from './Station';
@@ -29,4 +30,9 @@ export class Parameter {
   @OneToMany(() => Measurement, (measurement) => measurement.parameter)
   @JoinColumn()
   measurements: Measurement[];
+
+  @OneToOne(() => Alert, (alert) => alert.parameter)
+  @JoinColumn()
+  alert: Alert
+
 }

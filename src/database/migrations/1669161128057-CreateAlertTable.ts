@@ -12,44 +12,56 @@ export class CreateAlertTable1669161128057 implements MigrationInterface {
                 isGenerated: true,
                 generationStrategy: "increment"
             },
+
             {
-                name: "maxMeasurement",
+                name: "minLowAlert",
                 type: 'float'
             },
             {
-                name: "mediumMeasurement",
+                name: "maxLowAlert",
+                type: 'float'
+            },
+
+            {
+                name: "minMediumAlert",
                 type: 'float'
             },
             {
-                name: "minMeasurement",
+                name: "maxMediumAlert",
                 type: 'float'
             },
+
+            {
+                name: "minHighAlert",
+                type: 'float'
+            },
+            {
+                name: "maxHighAlert",
+                type: 'float'
+            },
+
+
             {
                 name: "created_at",
-                type: 'int'
-            },
-            {
-                name: "updated_at",
                 type: 'int'
             },
             ]
         }));
 
-        await queryRunner.query(`ALTER TABLE "parameter" ADD COLUMN "alertId" int`,)
+        await queryRunner.query(`ALTER TABLE "alert" ADD COLUMN "parameterId" int`,)
 
         await queryRunner.createForeignKey(
-            "parameter",
+            "alert",
             new TableForeignKey({
-                columnNames: ["alertId"],
+                columnNames: ["parameterId"],
                 referencedColumnNames: ["id"],
-                referencedTableName: "alert",
+                referencedTableName: "parameter",
                 onDelete: "CASCADE",
             }),
         )
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "parameter" DROP COLUMN "alertId"`,)
         await queryRunner.dropTable('alert');
     }
 
