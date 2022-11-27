@@ -7,11 +7,11 @@ export async function createAlert(req: Request, res: Response) {
   const { minLowAlert, maxLowAlert, minMediumAlert, maxMediumAlert, minHighAlert, maxHighAlert, parameterId } = req.body;
 
   try {
-    const hasAlert = await AlertRepository.findOne({ where: {} })
+    const hasAlert = await AlertRepository.findOne({ where: { minLowAlert, maxLowAlert, minMediumAlert, maxMediumAlert, minHighAlert, maxHighAlert, parameterId } })
     if (hasAlert) return responseWithStatus("Este alerta já existe", 409);
 
     const newAlert = AlertRepository.create({
-      minLowAlert, maxLowAlert, minMediumAlert, maxMediumAlert, minHighAlert, maxHighAlert, parameter: parameterId,
+      minLowAlert, maxLowAlert, minMediumAlert, maxMediumAlert, minHighAlert, maxHighAlert, parameterId: parameterId,
       created_at: Date.now()
     });
     await AlertRepository.save(newAlert);

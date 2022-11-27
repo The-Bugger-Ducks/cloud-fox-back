@@ -43,7 +43,7 @@ export class CreateAlertTable1669161128057 implements MigrationInterface {
 
             {
                 name: "created_at",
-                type: 'int'
+                type: 'bigInt'
             },
             ]
         }));

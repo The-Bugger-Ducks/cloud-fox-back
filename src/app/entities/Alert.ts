@@ -26,6 +26,9 @@ export class Alert {
   @Column()
   created_at: number;
 
+  @Column()
+  parameterId: number;
+
   @OneToOne(() => Parameter, (parameter) => parameter.alert)
   @JoinColumn()
   parameter: Alert;

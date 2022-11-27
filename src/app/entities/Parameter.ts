@@ -26,13 +26,14 @@ export class Parameter {
   @JoinColumn()
   parameterType: ParameterType;
 
+  @Column()
+  status: string;
 
   @OneToMany(() => Measurement, (measurement) => measurement.parameter)
   @JoinColumn()
   measurements: Measurement[];
 
   @OneToOne(() => Alert, (alert) => alert.parameter)
-  @JoinColumn()
   alert: Alert
 
 }

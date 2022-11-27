@@ -7,12 +7,16 @@ import { createAlert, deleteAlert } from '../services/alertService';
 
 class AlertController {
   async show(req: Request, res: Response) {
-    const { alertId } = req.params;
+    const { id } = req.params;
     try {
-      const alertFound = await AlertRepository.findOne({ where: { id: parseInt(alertId), } });
+      const alertFound = await AlertRepository.findOne({
+        relations: ['parameter', 'parameter.parameterType'],
+        where: { id: parseInt(String(id)), },
+      });
+
       if (!alertFound) {
         const { message, status } = responseWithStatus("alerta não encontrado", 404)
-        return res.json(message).status(status);
+        return res.status(status).json(message);
       }
 
       const { message, status } = responseWithStatus(alertFound, 200);
@@ -20,23 +24,23 @@ class AlertController {
     } catch (err) {
       logError(req, err);
       const { message, status } = responseWithStatus("Ocorreu um erro no servidor, tente novamente mais tarde", 500);
-      return res.json(message).status(status);
+      return res.status(status).json(message);
     }
   }
 
   async index(req: Request, res: Response) {
-    const alertsFound = await AlertRepository.find({});
+    const alertsFound = await AlertRepository.find({ relations: ['parameter.parameterType'] });
     return res.json(alertsFound);
   }
 
   async create(req: Request, res: Response) {
     const alertsCreated = await createAlert(req, res);
-    return res.json(alertsCreated.message).status(alertsCreated.status);
+    return res.status(alertsCreated.status).json(alertsCreated.message);
   }
 
   async delete(req: Request, res: Response) {
     const alertsCreated = await deleteAlert(req, res);
-    return res.json(alertsCreated.message).status(alertsCreated.status);
+    return res.status(alertsCreated.status).json(alertsCreated.message);
   }
 }
 
