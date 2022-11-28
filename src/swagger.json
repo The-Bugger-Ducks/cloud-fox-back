@@ -633,6 +633,72 @@
           }
         }
       }
+    },
+    "/alerts/": {
+      "post": {
+        "summary": "Register alerts for parameters",
+        "description": "This route has objective to register alerts for parameters",
+        "tags": [
+          "Alerts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAlert"
+              },
+              "examples": {
+                "teste": {
+                  "minLowAlert": 10,
+                  "maxLowAlert": 15,
+                  "minMediumAlert": 16,
+                  "maxMediumAlert": 20,
+                  "minHighAlert": 21,
+                  "maxHighAlert": 40,
+                  "parameterId": 12
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": "Alerta cadastrado com sucesso"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get All Alerts",
+        "description": "This route has objective to get all alerts",
+        "tags": [
+          "Alerts"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ListAlerts"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -890,6 +956,89 @@
           },
           "moment": {
             "type": "number"
+          }
+        }
+      },
+      "CreateAlert": {
+        "type": "object",
+        "properties": {
+          "minLowAlert": {
+            "type": "number"
+          },
+          "maxLowAlert": {
+            "type": "number"
+          },
+          "minMediumAlert": {
+            "type": "number"
+          },
+          "maxMediumAlert": {
+            "type": "number"
+          },
+          "minHighAlert": {
+            "type": "number"
+          },
+          "maxHighAlert": {
+            "type": "number"
+          },
+          "parameterId": {
+            "type": "number"
+          }
+        }
+      },
+      "ListAlerts": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "minLowAlert": {
+            "type": "number"
+          },
+          "maxLowAlert": {
+            "type": "number"
+          },
+          "minMediumAlert": {
+            "type": "number"
+          },
+          "maxMediumAlert": {
+            "type": "number"
+          },
+          "minHighAlert": {
+            "type": "number"
+          },
+          "maxHighAlert": {
+            "type": "number"
+          },
+          "parameterId": {
+            "type": "number"
+          },
+          "parameter": {
+            "type": "object",
+            "properties": {
+              "parameterTypes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "unit": {
+                      "type": "string"
+                    },
+                    "factor": {
+                      "type": "number"
+                    },
+                    "type": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

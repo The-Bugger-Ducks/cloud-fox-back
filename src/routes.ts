@@ -10,6 +10,7 @@ import adminMiddleware from './app/middlewares/adminMiddleware';
 
 import ParameterController from './app/controllers/ParameterController';
 import advancedMiddleware from './app/middlewares/advancedMiddleware';
+import AlertController from './app/controllers/AlertController';
 class Welcome {
   static getWelcome(req: Request, res: Response) {
     return res.send({ message: "CloudFox's API 🦊 ⛈️ 🌪️ " })
@@ -51,6 +52,11 @@ router.get('/measurements', MeasurementController.index);
 router.get('/measurements/:id', MeasurementController.show);
 router.post('/measurements', MeasurementController.measurementCreate);
 router.delete('/measurements/:id', MeasurementController.measurementDelete);
+
+router.get('/alerts', AlertController.index);
+router.get('/alerts/:id', AlertController.show);
+router.post('/alerts', AlertController.create);
+router.delete('/alerts/:id', AlertController.delete);
 
 
 
