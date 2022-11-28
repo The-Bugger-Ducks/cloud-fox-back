@@ -20,7 +20,6 @@ AppDataSource
     console.error("Error during Data Source initialization:", err)
   })
 
-
 const PORT = process.env.PORT || 3333
 
 const app = express();

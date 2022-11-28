@@ -1,10 +1,13 @@
 import { Request, Response } from 'express';
+import { AlertRepository } from '../../repositories/AlertRepository';
 import { MeasurementRepository } from '../../repositories/MeasurementRepository';
 import { ParameterRepository } from '../../repositories/ParameterRepository';
 import { ParameterTypeRepository } from '../../repositories/ParameterTypeRepository';
 import { StationRepository } from '../../repositories/StationRepository';
 import logError from '../../utils/logError';
 import { responseWithStatus } from '../../utils/responseWithStatus';
+import { Parameter } from '../entities/Parameter';
+import { ParameterType } from '../entities/ParameterType';
 
 
 export async function measurementCreate(req: Request, res: Response) {
@@ -34,6 +37,31 @@ export async function measurementCreate(req: Request, res: Response) {
 
       const newCollect = MeasurementRepository.create({ moment, parameterId: parameterFound.id, value: value });
       await MeasurementRepository.save(newCollect);
+
+      const alertFound = await AlertRepository.findOne({ where: { parameterId: parameterFound.id } });
+
+      let statusUpdate;
+      if (alertFound) {
+        if (alertFound.maxLowAlert >= value * parameterTypeFound.factor) {
+          statusUpdate = await ParameterRepository.createQueryBuilder()
+            .update(Parameter)
+            .set({ status: 'green' })
+            .where("id = :id", { id: parameterFound.id })
+            .returning('*').execute();
+        } else if (alertFound.maxMediumAlert >= value * parameterTypeFound.factor) {
+          statusUpdate = await ParameterRepository.createQueryBuilder()
+            .update(Parameter)
+            .set({ status: 'orange' })
+            .where("id = :id", { id: parameterFound.id })
+            .returning('*').execute();
+        } else if (alertFound.minHighAlert <= value * parameterTypeFound.factor) {
+          statusUpdate = await ParameterRepository.createQueryBuilder()
+            .update(Parameter)
+            .set({ status: 'red' })
+            .where("id = :id", { id: parameterFound.id })
+            .returning('*').execute();
+        }
+      }
     }
 
     return responseWithStatus("Medida cadastrada com sucesso", 201);
