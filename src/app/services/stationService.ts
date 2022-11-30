@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { IsNull, Not } from 'typeorm';
+import { AlertRepository } from '../../repositories/AlertRepository';
 import { ParameterRepository } from '../../repositories/ParameterRepository';
 import { ParameterTypeRepository } from '../../repositories/ParameterTypeRepository';
 import logError from '../../utils/logError';
@@ -88,7 +90,17 @@ export async function findStation(req: Request, res: Response) {
   const { id } = req.params;
 
   try {
-    const stationFound = await StationRepository.findOne({ where: { id, } });
+    //adicionei mais uma relação no endpoint de estações com where
+    const stationFound = await StationRepository.findOne({
+      relations: {
+        parameters: true
+      },
+      where: {
+        id, parameters: {
+          status: Not(IsNull()) // condição para retornar os parametros com alertas
+        }
+      }
+    });
     if (!stationFound) return responseWithStatus("Estação não foi encontrada.", 404);
 
     const paramsTypeFound = await ParameterTypeRepository.find({
@@ -106,6 +118,11 @@ export async function findStation(req: Request, res: Response) {
     logError(req, err);
     return responseWithStatus("Ocorreu um erro no servidor, tente novamente mais tarde.", 500);
   }
+}
+
+export async function showAlertsStation(req: Request, res: Response) {
+  const { stationId } = req.params;
+
 }
 
 

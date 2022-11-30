@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { AppDataSource } from '../../data-source';
 import { Station } from '../entities/Station';
 import { ICreateParameterType } from '../interfaces/ICreateParameterType';
-import { activateStation, createStation, createStationWithParameterTypes, deleteStation, findStation, updateStationData } from '../services/stationService';
+import { activateStation, createStation, createStationWithParameterTypes, deleteStation, findStation, showAlertsStation, updateStationData } from '../services/stationService';
 
 
 class StationController {
