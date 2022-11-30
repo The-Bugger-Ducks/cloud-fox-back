@@ -104,7 +104,6 @@ export async function findStation(req: Request, res: Response) {
     if (!stationFound) return responseWithStatus("Estação não foi encontrada.", 404);
 
     const paramsTypeFound = await ParameterTypeRepository.find({
-      relations: ['parameter'],
       where: {
         parameter: {
           stationId: id

@@ -815,6 +815,26 @@
           "isActive": {
             "type": "boolean"
           },
+          "parameter": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number"
+                },
+                "stationId": {
+                  "type": "string"
+                },
+                "parameterTypeId": {
+                  "type": "number"
+                },
+                "status": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "parameterTypes": {
             "type": "array",
             "items": {

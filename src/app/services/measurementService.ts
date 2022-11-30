@@ -43,14 +43,7 @@ export async function measurementCreate(req: Request, res: Response) {
       let statusUpdate;
       if (alertFound) {
 
-        if (alertFound.maxLowAlert >= value * parameterTypeFound.factor) {
-          statusUpdate = await ParameterRepository.createQueryBuilder()
-            .update(Parameter)
-            .set({ status: 'green' })
-            .where("id = :id", { id: parameterFound.id })
-            .returning('*').execute();
-
-        } else if (alertFound.maxMediumAlert >= value * parameterTypeFound.factor) {
+        if (alertFound.maxMediumAlert >= value * parameterTypeFound.factor) {
           statusUpdate = await ParameterRepository.createQueryBuilder()
             .update(Parameter)
             .set({ status: 'orange' })
